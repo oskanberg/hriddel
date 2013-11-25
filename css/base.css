@@ -1,0 +1,42 @@
+
+body
+{
+    font-family: "Trebuchet MS", Helvetica, Arial, sans-serif;
+}
+
+article,
+nav,
+header
+{
+    display: block;
+}
+
+header
+{
+    height: 80px;
+    background: #9C9C9C;
+}
+
+header .account_info
+{
+
+}
+
+nav
+{
+    background: #555555;
+    width: 950px;
+    margin: 0 auto;
+}
+
+.site
+{
+    min-width: 950px;
+    background: #333233;
+}
+
+.page_content
+{
+    margin: 0 auto;
+    width: 950px;
+}
