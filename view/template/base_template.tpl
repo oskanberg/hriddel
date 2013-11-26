@@ -10,13 +10,20 @@
         <section id="site">
             <header id="global_header">
                 <div class="restrict_and_center pad cf">
-                    <img id="logo" src="https://www.google.co.uk/images/srpr/logo11w.png" height='70px' width='200px'/>
+                    <a href='/'>
+                        <img id="logo" src="https://www.google.co.uk/images/srpr/logo11w.png" height='70px' width='200px'/>
+                    </a>
                     <section id="user_menu">
+                        <?php if ($this->_model->is_user_logged_in())
+                        {
+                            echo '<p>Logged in as ' . $this->_model->get_logged_in_username() . '</p>';
+                        } else {
+                        ?>
                         <ul>
-                            <li><a href="?Home">Home</a></li>
                             <li><a href="?login">Login</a></li>
                             <li><a href="?register">Register</a></li>
                         </ul>
+                        <?php } ?>
                     </section>
                 </div>
             </header>

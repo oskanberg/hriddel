@@ -4,11 +4,9 @@ class LoginController extends Controller
 {
     public function login($username)
     {
-        $user = $this->model->get_user_by_username($username);
-        if (!is_null($user))
+        if ($this->_model->authenticate_username($username))
         {
-            $_SESSION['u_id'] = $user->u_id;
-            return 
+            $_SESSION['u_id'] = $username;
         }
     }
 }

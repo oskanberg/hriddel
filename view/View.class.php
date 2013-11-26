@@ -2,11 +2,14 @@
 
 abstract class View
 {
-    protected $controller;
+    protected $_controller;
+    protected $_model;
 
-    public function __construct($controller)
+    public function __construct($controller, $model)
     {
-        $this->controller = $controller;
+        $this->_controller = $controller;
+        $this->_model = $model;
+        session_start();
     }
 
     abstract public function display();

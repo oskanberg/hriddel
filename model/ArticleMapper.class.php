@@ -20,6 +20,12 @@ class ArticleMapper extends AbstractDataMapper
         }
     }
 
+    public function save(AbstractObject $obj)
+    {
+        $obj->set_id($this->_save_to_database($obj));
+    }
+
+
     public function delete(AbstractObject $obj)
     {
 
@@ -35,7 +41,7 @@ class ArticleMapper extends AbstractDataMapper
 
     }
 
-    protected function save_to_database(AbstractObject $obj)
+    protected function _save_to_database(AbstractObject $obj)
     {
         $this->database_connection->connect();
         try

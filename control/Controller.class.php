@@ -1,12 +1,12 @@
 <?php
 
-Abstract class Controller
+abstract class Controller
 {
-    protected $model;
+    protected $_model;
 
     public function __construct($model)
     {
-        $this->model = $model;
+        $this->_model = $model;
     }
 
 }
