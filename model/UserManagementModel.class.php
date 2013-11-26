@@ -1,6 +1,6 @@
 <?php
 
-class LoginModel extends Model
+class UserManagementModel extends Model
 {
     private $user_mapper;
 

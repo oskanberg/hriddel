@@ -11,8 +11,8 @@ $map = array(
         'view' => 'IndexView'
     ),
     'login' => array(
-        'model' => 'LoginModel',
-        'controller' => 'LoginController',
+        'model' => 'UserManagementModel',
+        'controller' => 'UserManagementController',
         'view' => 'LoginView'
     )
 );
