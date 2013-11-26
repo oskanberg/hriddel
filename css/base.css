@@ -1,42 +1,123 @@
-
-body
+html, body
 {
-    font-family: "Trebuchet MS", Helvetica, Arial, sans-serif;
+    height: 100%;
+    font-family: Georgia, Helvetica, sans-serif;
+    color: #666666;
 }
 
-article,
-nav,
-header
+a
 {
-    display: block;
+    color: #555555;
 }
 
-header
+*
 {
-    height: 80px;
-    background: #9C9C9C;
+    margin: 0;
+    padding: 0;
 }
 
-header .account_info
-{
-
-}
-
-nav
+#site
 {
     background: #555555;
-    width: 950px;
-    margin: 0 auto;
-}
-
-.site
-{
     min-width: 950px;
-    background: #333233;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    width: 100%;
+    height: 100%;
 }
 
-.page_content
+#global_header
 {
+    background: #CCCCCC;
+    padding: 10px 0px 10px 0px;
     margin: 0 auto;
+    border-top: 1px solid #00b3eb;
+}
+
+#user_menu
+{
+    float: right;
+    width: auto;
+}
+
+#user_menu li
+{
+    list-style: none;
+    border-bottom: 1px dashed #777777;
+    padding-top: 2px;
+}
+
+#user_menu a
+{
+    text-decoration: none;
+}
+
+#main_menu
+{
+    background: #555555;
+    margin: 0 auto;
+    border-top: 1px solid #00b3eb;
+    box-shadow: 0px 1px 2px  #000000;
+}
+
+#non_nav
+{
+    margin-top: 10px;
+}
+
+#horizontal_list
+{
+    list-style-type: none;
+    margin: 0 auto;
+    padding: 0;
+}
+
+#horizontal_list li
+{
+    display: inline;
+    border-right: 1px solid #AAAAAA;
+}
+
+#horizontal_list li:first-child
+{
+    border-left: 1px solid #AAAAAA;
+}
+
+#horizontal_list a
+{
+    color: #EEEEEE;
+    font-weight: bold;
+    text-decoration: none;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.content_box
+{
+    background: #DDDDDD;
+    border-radius: 3px;
+    box-shadow: 0px 0px 4px #000000;
+}
+
+.restrict_and_center
+{
     width: 950px;
+    margin: 0 auto;
+}
+
+.pad
+{
+    padding: 5px;
+}
+
+.cf:before,
+.cf:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+.cf:after {
+    clear: both;
+}
+.cf {
+    *zoom: 1;
 }

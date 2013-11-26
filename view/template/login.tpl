@@ -1,6 +1,6 @@
 
 <!-- begin login.tpl -->
-<form action="?login">
+<form action="?login" method="post">
   <input type="text" placeholder="Username">
   <input type="submit">
 </form>

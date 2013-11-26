@@ -13,7 +13,7 @@ $model = new Model();
 $view = null;
 $controller = null;
 
-if(empty($_GET))
+if (empty($_GET))
 {
     $controller = new IndexController($model);
     $view = new IndexView($controller);
@@ -24,6 +24,11 @@ if(empty($_GET))
     $view = new $map[$page]['view']($controller);
 }
 
-$view->display();
+if (isset($_GET['action']))
+{
+    $view->{$_GET['action']}();
+} else {
+    $view->display();
+}
 
 ?>
