@@ -43,13 +43,14 @@ a
 #user_menu li
 {
     list-style: none;
-    border-bottom: 1px dashed #777777;
     padding-top: 2px;
 }
 
 #user_menu a
 {
     text-decoration: none;
+    text-align: right;
+    border-bottom: 1px dashed #777777;
 }
 
 #main_menu

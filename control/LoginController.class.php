@@ -9,6 +9,12 @@ class LoginController extends Controller
             $_SESSION['u_id'] = $username;
         }
     }
+
+    public function logout()
+    {
+        session_destroy();
+        unset($_SESSION['u_id']);
+    }
 }
 
 ?>

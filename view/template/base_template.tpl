@@ -17,6 +17,7 @@
                         <?php if ($this->_model->is_user_logged_in())
                         {
                             echo '<p>Logged in as ' . $this->_model->get_logged_in_username() . '</p>';
+                            echo '<a href="/?login&action=logout">Logout</a>';
                         } else {
                         ?>
                         <ul>

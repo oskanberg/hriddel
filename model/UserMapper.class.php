@@ -10,6 +10,7 @@ class UserMapper extends AbstractDataMapper
             $new_user->username = $data['username'];
             $new_user->name = $data['name'];
             $new_user->type = $data['type'];
+            $new_user->set_id($data['username']);
             return $new_user;
         } else {
             throw new Exception('Need data.');
@@ -18,7 +19,7 @@ class UserMapper extends AbstractDataMapper
     
     public function save(AbstractObject $obj)
     {
-        $obj->set_id($this->_save_to_database($obj));
+        $this->_save_to_database($obj);
     }
 
     public function delete(AbstractObject $obj)
@@ -73,12 +74,7 @@ class UserMapper extends AbstractDataMapper
                 ':name' => $obj->name,
                 ':type' => $obj->type
             ));
-            
-            $this_user_id = $this->_database_connection->get_connection()->lastInsertID();
             $this->_database_connection->close_connection();
-            
-            return $this_user_id;
-            
         } catch(PDOException $e) {
             $this->_database_connection->close_connection();
             echo 'ERROR: ' . $e->getMessage();

@@ -1,40 +1,84 @@
 
-DROP TABLE IF EXISTS `authorship`;
-DROP TABLE IF EXISTS `articles`;
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS authorship;
+DROP TABLE IF EXISTS articles;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS columns;
+DROP TABLE IF EXISTS column_mappings;
+DROP TABLE IF EXISTS reader_comments;
+DROP TABLE IF EXISTS editor_comments;
+DROP TABLE IF EXISTS review_scores;
+DROP TABLE IF EXISTS likes_and_dislikes;
 
-CREATE TABLE `articles` (
-  `a_id` int NOT NULL AUTO_INCREMENT,
-  `contents` text(30000) NOT NULL,
-  `status` varchar(16) NOT NULL,
-  `title` varchar(250) NOT NULL,
-  `publish_date` date NOT NULL,
-  `type` varchar(7) NOT NULL,
-  `cover_image` varchar(100),
-  PRIMARY KEY (`a_id`)
+CREATE TABLE articles (
+  a_id int NOT NULL AUTO_INCREMENT,
+  contents text(30000) NOT NULL,
+  status enum ('submitted', 'under review', 'awaiting changes', 'published', 'rejected') NOT NULL,
+  title varchar(250) NOT NULL,
+  publish_date date NOT NULL,
+  type enum ('article', 'column article', 'review') NOT NULL,
+  cover_image varchar(100),
+  PRIMARY KEY (a_id)
 );
 
-CREATE TABLE `users` (
-  `u_id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(20) UNIQUE NOT NULL,
-  `name` varchar(50),
-  `type` varchar(10),
-  PRIMARY KEY (`u_id`)
+CREATE TABLE users (
+  username varchar(20) UNIQUE NOT NULL,
+  name varchar(50),
+  type enum ('subscriber', 'writer', 'editor', 'publisher'),
+  PRIMARY KEY (username)
 );
 
-CREATE TABLE `authorship` (
-  `auth_id` int NOT NULL AUTO_INCREMENT,
-  `u_id` int NOT NULL,
-  `a_id` int NOT NULL,
-  PRIMARY KEY (`auth_id`),
-  FOREIGN KEY (u_id) REFERENCES users(u_id),
+CREATE TABLE authorship (
+  username varchar(20) NOT NULL,
+  a_id int NOT NULL,
+  PRIMARY KEY (a_id, username),
+  FOREIGN KEY (username) REFERENCES users(username),
   FOREIGN KEY (a_id) REFERENCES articles(a_id)
 );
 
+CREATE TABLE reader_comments (
+  rc_id int NOT NULL AUTO_INCREMENT,
+  username varchar(20) NOT NULL,
+  a_id int NOT NULL,
+  content varchar(1000) NOT NULL,
+  PRIMARY KEY (rc_id),
+  FOREIGN KEY (username) REFERENCES users(username),
+  FOREIGN KEY (a_id) REFERENCES articles(a_id)
+);
 
-INSERT INTO articles (contents, status, title, publish_date, type, cover_image) 
-VALUES ('Lorem Ipsum', 'submitted', 'Test', NOW(), 'article', 'dsfjasdflka.jpg');
+CREATE TABLE editor_comments (
+  ec_id int NOT NULL AUTO_INCREMENT,
+  username varchar(20) NOT NULL,
+  a_id int NOT NULL,
+  content varchar(1000) NOT NULL,
+  PRIMARY KEY (ec_id),
+  FOREIGN KEY (username) REFERENCES users(username),
+  FOREIGN KEY (a_id) REFERENCES articles(a_id)
+);
 
-INSERT INTO users (username, name, type) VALUES ('testman', 'Test Man', 'editor');
+CREATE TABLE columns (
+  name varchar(60) UNIQUE NOT NULL,
+  PRIMARY KEY (name)
+);
 
-INSERT INTO authorship (u_id, a_id) VALUES (1, 1);
+CREATE TABLE column_mappings (
+  c_name varchar(60),
+  a_id int NOT NULL,
+  PRIMARY KEY (a_id),
+  FOREIGN KEY (a_id) REFERENCES articles(a_id),
+  FOREIGN KEY (c_name) REFERENCES columns (name)
+);
+
+CREATE TABLE review_scores (
+  a_id int NOT NULL,
+  score int NOT NULL,
+  PRIMARY KEY (a_id),
+  FOREIGN KEY (a_id) REFERENCES articles(a_id)
+);
+
+CREATE TABLE likes_and_dislikes (
+  username varchar(20) NOT NULL,
+  a_id int NOT NULL,
+  impression ENUM ('dislike', 'like'),
+  PRIMARY KEY (username, a_id),
+  FOREIGN KEY (a_id) REFERENCES articles(a_id)
+);

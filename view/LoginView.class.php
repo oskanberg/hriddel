@@ -27,6 +27,12 @@ class LoginView extends View
         }
         include_once(TEMPLATE_PATH . 'base_template.tpl');
     }
+
+    public function logout()
+    {
+        $this->_controller->logout();
+        $this->display();
+    }
 }
 
 ?>
