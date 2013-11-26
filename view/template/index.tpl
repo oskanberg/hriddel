@@ -1,4 +1,4 @@
 
-<!-- begin login.tpl -->
+<!-- begin index.tpl -->
 <p>Homepage</p>
-<!-- end login.tpl -->
+<!-- end index.tpl -->

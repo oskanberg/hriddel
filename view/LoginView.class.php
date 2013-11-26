@@ -10,7 +10,8 @@ class LoginView extends View
         $data = array(
             'title' => $this->title,
             'view_specific_template' => $this->template,
-            'login_result_text' => ''
+            'login_result_text' => '',
+            'login_result' => false
         );
         if (isset($_POST['u_id']))
         {

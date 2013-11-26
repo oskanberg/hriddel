@@ -68,7 +68,7 @@ class UserMapper extends AbstractDataMapper
         try
         {
             $stmt = 'INSERT INTO users (username, name, type) VALUES (:username, :name, :type)';
-            $statement = $this->database_connection->get_connection()->prepare($stmt);
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
             $statement->execute(array(
                 ':username' => $obj->username,
                 ':name' => $obj->name,

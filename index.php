@@ -14,6 +14,11 @@ $map = array(
         'model' => 'UserManagementModel',
         'controller' => 'UserManagementController',
         'view' => 'LoginView'
+    ),
+    'register' => array(
+        'model' => 'UserManagementModel',
+        'controller' => 'UserManagementController',
+        'view' => 'RegisterView'
     )
 );
 

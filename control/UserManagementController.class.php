@@ -15,6 +15,12 @@ class UserManagementController extends Controller
         session_destroy();
         unset($_SESSION['u_id']);
     }
+
+    public function register_user($username, $name)
+    {
+        $this->_model->register_user($username, $name);
+        $this->login($username);
+    }
 }
 
 ?>

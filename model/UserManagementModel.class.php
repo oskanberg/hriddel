@@ -20,6 +20,20 @@ class UserManagementModel extends Model
             return true;
         }
     }
+
+    public function register_user($username, $name)
+    {
+        // create the data for our new subscriber
+        $data = array(
+            'username' => $username,
+            'name' => $name,
+            'type' => 'subscriber'
+        );
+        // create new object
+        $new_user = $this->user_mapper->create_new($data);
+        // save to the database
+        $this->user_mapper->save($new_user);
+    }
 }
 
 ?>
