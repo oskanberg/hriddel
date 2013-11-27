@@ -23,6 +23,7 @@ class UserManagementModel extends Model
 
     public function register_user($username, $name)
     {
+        
         // create the data for our new subscriber
         $data = array(
             'username' => $username,
