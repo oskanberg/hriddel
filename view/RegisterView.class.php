@@ -10,14 +10,21 @@ class RegisterView extends View
         $data = array(
             'title' => $this->title,
             'view_specific_template' => $this->template,
-            'register_result_text' => '',
-            'register_result' => false
+            'show_form' => true,
+            'show_error' => false,
+            'show_result' => false
         );
-        if (isset($_POST['username']) && isset($_POST['name']))
+        if ($this->_model->is_user_logged_in())
         {
-            $this->_controller->register_user($_POST['username'], $_POST['name']);
-            $data['register_result'] = true;
-            $data['register_result_text'] = '<p>Register successful. You are now logged in.</p>';
+            $data['show_result'] = true;
+            $data['register_result_text'] = 'Registration successful. You have been logged in.';
+            $data['show_form'] = false;
+        } else {
+            if ($this->_model->error_exists())
+            {
+                $data['show_error'] = true;
+                $data['error_string'] = '<p class="error">' . $this->_model->get_error_string() . '</p>';
+            }
         }
         include_once(TEMPLATE_PATH . 'base_template.tpl');
     }

@@ -41,9 +41,9 @@ if (empty($_GET))
 
 if (isset($_GET['action']))
 {
-    $view->{$_GET['action']}();
-} else {
-    $view->display();
+    $controller->{$_GET['action']}();
 }
+
+$view->display();
 
 ?>

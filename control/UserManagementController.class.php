@@ -2,24 +2,26 @@
 
 class UserManagementController extends Controller
 {
-    public function login($username)
+    public function authenticate()
     {
-        if ($this->_model->authenticate_username($username))
+        if (isset($_POST['username']))
         {
-            $_SESSION['u_id'] = $username;
+            $this->_model->authenticate_username($_POST['username']);
         }
     }
 
     public function logout()
     {
         session_destroy();
-        unset($_SESSION['u_id']);
+        unset($_SESSION['username']);
     }
 
-    public function register_user($username, $name)
+    public function register_user()
     {
-        $this->_model->register_user($username, $name);
-        $this->login($username);
+        if (isset($_POST['username']) && isset($_POST['name']))
+        {
+            $this->_model->register_user($_POST['username'], $_POST['name']);
+        }
     }
 }
 

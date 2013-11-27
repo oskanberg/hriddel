@@ -1,14 +1,22 @@
 
 <!-- begin login.tpl -->
 <?php
-if ($data['login_result'])
+if ($data['show_error'])
+{
+    echo $data['error_string'];
+}
+if ($data['show_result_text'])
 {
     echo $data['login_result_text'];
-} else {
-    echo $data['login_result_text']; ?>
-<form action="?login" method="post">
-  <input type="text" name="u_id" placeholder="Username">
+}
+if ($data['show_login'])
+{
+?>
+<form action="?login&action=authenticate" method="post">
+  <input type="text" name="username" placeholder="Username">
   <input type="submit">
 </form>
-<?php } ?>
+<?php
+}
+?>
 <!-- end login.tpl -->

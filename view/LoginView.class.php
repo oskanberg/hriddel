@@ -10,29 +10,23 @@ class LoginView extends View
         $data = array(
             'title' => $this->title,
             'view_specific_template' => $this->template,
-            'login_result_text' => '',
-            'login_result' => false
+            'show_error' => false,
+            'show_login' => true,
+            'show_result_text' => false
         );
-        if (isset($_POST['u_id']))
+        if ($this->_model->is_user_logged_in())
         {
-            $this->_controller->login($_POST['u_id']);
-            $username = $this->_model->get_logged_in_username();
-            if (!is_null($username))
+            $data['show_login'] = false;
+            $data['show_result_text'] = true;
+            $data['login_result_text'] = '<p>Welcome ' . $this->_model->get_logged_in_username() . '</p>';
+        } else {
+            if ($this->_model->error_exists())
             {
-                $data['login_result'] = true;
-                $data['login_result_text'] = 'Welcome ' . $username;
-            } else {
-                $data['login_result'] = false;
-                $data['login_result_text'] = '<span style="color:red">User not found</span>';
+                $data['show_error'] = true;
+                $data['error_string'] = '<p class="error">' . $this->_model->get_error_string() . '</p>';
             }
         }
         include_once(TEMPLATE_PATH . 'base_template.tpl');
-    }
-
-    public function logout()
-    {
-        $this->_controller->logout();
-        $this->display();
     }
 }
 
