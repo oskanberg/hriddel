@@ -5,6 +5,7 @@ abstract class Model
     protected $_database_connection;
     protected $_error = false;
     protected $_error_string = null;
+    protected $_user_mapper;
 
     public function __construct()
     {
@@ -13,6 +14,7 @@ abstract class Model
         $username = 'root';
         $password = 'iaptassessment42';
         $this->_database_connection = new DatabaseConnection($host, $database_name, $username, $password);
+        $this->_user_mapper = new UserMapper($this->_database_connection);
     }
 
     protected function _record_error($error_string)
@@ -23,7 +25,7 @@ abstract class Model
 
     public function error_exists()
     {
-        return !is_null($this->_error);
+        return $this->_error;
     }
     
     public function get_error_string()
@@ -53,6 +55,30 @@ abstract class Model
             return $_SESSION['username'];
         } else {
             return null;
+        }
+    }
+
+    public function get_logged_in_user()
+    {
+        if ($this->is_user_logged_in())
+        {
+            $user = $this->_user_mapper->find_by_id($_SESSION['username']);
+            return $user;
+        }
+    }
+    
+    public function can_current_user_submit_articles()
+    {
+        if ($this->is_user_logged_in())
+        {
+            $user = $this->_user_mapper->find_by_id($_SESSION['username']);
+            // the only type of user that can't submit articles is the subscriber
+            if ($user->type == 'subscriber')
+            {
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 }

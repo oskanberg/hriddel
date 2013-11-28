@@ -2,17 +2,10 @@
 
 class UserManagementModel extends Model
 {
-    private $user_mapper;
-
-    public function __construct()
-    {
-        Model::__construct();
-        $this->user_mapper = new UserMapper($this->_database_connection);
-    }
 
     public function authenticate_username($username)
     {
-        $user = $this->user_mapper->find_by_id($username);
+        $user = $this->_user_mapper->find_by_id($username);
         if (!is_null($user))
         {
             $_SESSION['username'] = $username;
@@ -24,7 +17,7 @@ class UserManagementModel extends Model
     public function register_user($username, $name)
     {
         // before we do anything, check for uniqueness
-        $possible_duplicate = $this->user_mapper->find_by_id($username);
+        $possible_duplicate = $this->_user_mapper->find_by_id($username);
         if (!is_null($possible_duplicate))
         {
             $this->_record_error('Username ' . $username . ' has already been taken. Please choose another.');
@@ -36,9 +29,9 @@ class UserManagementModel extends Model
                 'type' => 'subscriber'
             );
             // create new object
-            $new_user = $this->user_mapper->create_new($data);
+            $new_user = $this->_user_mapper->create_new($data);
             // save to the database
-            $this->user_mapper->save($new_user);
+            $this->_user_mapper->save($new_user);
             $this->authenticate_username($username);
         }
     }

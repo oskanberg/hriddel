@@ -19,6 +19,11 @@ $map = array(
         'model' => 'UserManagementModel',
         'controller' => 'UserManagementController',
         'view' => 'RegisterView'
+    ),
+    'submit' => array(
+        'model' => 'ArticleManagementModel',
+        'controller' => 'ArticleManagementController',
+        'view' => 'SubmitArticleView'
     )
 );
 

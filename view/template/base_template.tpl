@@ -3,16 +3,16 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <script type='text/javascript' src='//code.jquery.com/jquery-1.10.1.js'></script>
+        <script type='text/javascript' src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+        <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
         <link rel="stylesheet" type="text/css" href="/css/base.css" />
         <title><?php echo $data['title']; ?></title>
     </head>
     <body>
         <section id="site">
             <header id="global_header">
-                <div class="restrict_and_center pad cf">
-                    <a href='/'>
-                        <img id="logo" src="https://www.google.co.uk/images/srpr/logo11w.png" height='70px' width='200px'/>
-                    </a>
+                <div class="restrict_and_center pad">
                     <section id="user_menu">
                         <?php if ($this->_model->is_user_logged_in())
                         {
@@ -28,25 +28,35 @@
                     </section>
                 </div>
             </header>
-            <nav id="main_menu">
-                <div class="restrict_and_center cf">
-                    <ul id="horizontal_list">
-                        <li class="horizontal_list">
-                            <a href="/">HOME</a>
+            <nav id="main_menu" class="cf">
+                <div class="restrict_and_center">
+                    <ul id="horizontal_list" style="width:465px">
+                        <li>
+                            <a href="/">home</a>
                         </li>
-                        <li class="horizontal_list">
-                            <a href="/articles">ARTICLES</a>
+                        <li>
+                            <a href="/articles">articles</a>
                         </li>
-                        <li class="horizontal_list">
-                            <a href="/reviews">REVIEWS</a>
+                        <li>
+                            <a href="/reviews">reviews</a>
                         </li>
-                        <li class="horizontal_list">
-                            <a href="/columns">COLUMNS</a>
+                        <li>
+                            <a href="/columns">columns</a>
                         </li>
+                        <?php
+                        if ($this->_model->can_current_user_submit_articles())
+                        {
+                        ?>
+                        <li style="background: #881111;">
+                            <a href="/?submit">submit article</a>
+                        </li>
+                        <?php
+                        }
+                        ?>
                     </ul>
                 </div>
             </nav>
-            <div id="non_nav">
+            <div id="non_nav" class="cf">
                 <section class="content_box restrict_and_center pad">
                     <?php
                     include_once(TEMPLATE_PATH . $data['view_specific_template']);

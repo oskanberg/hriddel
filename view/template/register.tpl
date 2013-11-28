@@ -13,8 +13,8 @@ if ($data['show_form'])
 {
 ?>
 <form action="?register&action=register_user" method="post">
-  <input type="text" name="username" placeholder="Username">
-  <input type="text" name="name" placeholder="Full name">
+  <input type="text" name="username" placeholder="Username"><br />
+  <input type="text" name="name" placeholder="Full name"><br />
   <input type="submit">
 </form>
 <?php } ?>

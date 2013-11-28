@@ -1,13 +1,13 @@
 
 DROP TABLE IF EXISTS authorship;
-DROP TABLE IF EXISTS articles;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS columns;
 DROP TABLE IF EXISTS column_mappings;
 DROP TABLE IF EXISTS reader_comments;
 DROP TABLE IF EXISTS editor_comments;
 DROP TABLE IF EXISTS review_scores;
 DROP TABLE IF EXISTS likes_and_dislikes;
+DROP TABLE IF EXISTS columns;
+DROP TABLE IF EXISTS articles;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE articles (
   a_id int NOT NULL AUTO_INCREMENT,
@@ -50,6 +50,7 @@ CREATE TABLE editor_comments (
   username varchar(20) NOT NULL,
   a_id int NOT NULL,
   content varchar(1000) NOT NULL,
+  time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (ec_id),
   FOREIGN KEY (username) REFERENCES users(username),
   FOREIGN KEY (a_id) REFERENCES articles(a_id)

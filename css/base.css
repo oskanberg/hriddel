@@ -3,6 +3,7 @@ html, body
     height: 100%;
     font-family: Georgia, Helvetica, sans-serif;
     color: #666666;
+    background: #999999;
 }
 
 a
@@ -23,7 +24,6 @@ p.error
 
 #site
 {
-    background: #555555;
     min-width: 950px;
     margin: 0px 0px 0px 0px;
     padding: 0px 0px 0px 0px;
@@ -37,6 +37,7 @@ p.error
     padding: 10px 0px 10px 0px;
     margin: 0 auto;
     border-top: 1px solid #00b3eb;
+    height: 90px;
 }
 
 #user_menu
@@ -62,8 +63,14 @@ p.error
 {
     background: #555555;
     margin: 0 auto;
+    height: 20px;
     border-top: 1px solid #00b3eb;
     box-shadow: 0px 1px 2px  #000000;
+}
+
+#main_menu a:hover
+{
+    background: #00b3eb;
 }
 
 #non_nav
@@ -74,7 +81,7 @@ p.error
 #horizontal_list
 {
     list-style-type: none;
-    margin: 0 auto;
+    display: inline;
     padding: 0;
 }
 
@@ -101,7 +108,7 @@ p.error
 .content_box
 {
     background: #DDDDDD;
-    border-radius: 3px;
+    border-radius: 5px;
     box-shadow: 0px 0px 4px #000000;
 }
 
