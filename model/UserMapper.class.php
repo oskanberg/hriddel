@@ -31,6 +31,19 @@ class UserMapper extends AbstractDataMapper
     {
 
     }
+
+    public function get_all()
+    {
+        $stmt = 'SELECT * FROM users';
+        $statement = $this->_database_connection->get_connection()->prepare($stmt);
+        $statement->execute();
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC))
+        {
+            // create array of user objects
+            $users[] = $this->create_new($row);
+        }
+        return $users;
+    }
     
     public function find_by_id($username)
     {
@@ -60,7 +73,6 @@ class UserMapper extends AbstractDataMapper
             echo 'ERROR: ' . $e->getMessage();
         }
     }
-
 
     protected function _save_to_database(AbstractObject $obj)
     {

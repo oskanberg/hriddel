@@ -1,7 +1,6 @@
 
 DROP TABLE IF EXISTS authorship;
 DROP TABLE IF EXISTS column_mappings;
-DROP TABLE IF EXISTS reader_comments;
 DROP TABLE IF EXISTS editor_comments;
 DROP TABLE IF EXISTS review_scores;
 DROP TABLE IF EXISTS likes_and_dislikes;
@@ -31,16 +30,6 @@ CREATE TABLE authorship (
   username varchar(20) NOT NULL,
   a_id int NOT NULL,
   PRIMARY KEY (a_id, username),
-  FOREIGN KEY (username) REFERENCES users(username),
-  FOREIGN KEY (a_id) REFERENCES articles(a_id)
-);
-
-CREATE TABLE reader_comments (
-  rc_id int NOT NULL AUTO_INCREMENT,
-  username varchar(20) NOT NULL,
-  a_id int NOT NULL,
-  content varchar(1000) NOT NULL,
-  PRIMARY KEY (rc_id),
   FOREIGN KEY (username) REFERENCES users(username),
   FOREIGN KEY (a_id) REFERENCES articles(a_id)
 );

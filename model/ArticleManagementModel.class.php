@@ -3,15 +3,18 @@
 class ArticleManagementModel extends Model
 {
     private $submit_attempted = false;
-    private $article_mapper;
+    private $column_article_mapper;
+    private $review_mapper;
 
     public function __construct()
     {
         Model::__construct();
         $this->article_mapper = new ArticleMapper($this->_database_connection);
+        $this->column_article_mapper = new ColumnArticleMapper($this->_database_connection);
+        $this->review_mapper = new ReviewMapper($this->_database_connection);
     }
     
-    public function submit_article($title, $content, $type, $additional_authors, $cover_image, $column_name=NULL)
+    public function submit_article($title, $content, $type, $additional_authors, $cover_image, $column_name, $review_score)
     {
         // so we can query it from the view later
         $this->submit_attempted = true;
@@ -30,8 +33,23 @@ class ArticleManagementModel extends Model
             'status' => 'submitted',
             'cover_image' => $cover_image
         );
-        $new_article = $this->article_mapper->create_new($data);
-        $this->article_mapper->save($new_article);
+        if (!is_null($column_name))
+        {
+            // it's a column article
+            $data['column_name'] = $column_name;
+            $column_name = $this->column_article_mapper->create_new($data);
+            $this->column_article_mapper->save($column_name);
+        } else if (!is_null($review_score)) {
+            // it's a reivew
+            $data['review_score'] = $review_score;
+            $new_review = $this->review_mapper->create_new($data);
+            $this->review_mapper->save($new_review);
+        } else {
+            // it's a regular article
+            $data['column_name'] = $column_name;
+            $new_article = $this->article_mapper->create_new($data);
+            $this->article_mapper->save($new_article);
+        }
     }
 
     /*

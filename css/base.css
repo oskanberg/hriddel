@@ -1,9 +1,9 @@
 html, body
 {
     height: 100%;
-    font-family: Georgia, Helvetica, sans-serif;
+    font-family: Verdana, Arial, sans-serif;
     color: #666666;
-    background: #999999;
+    background: #CCCCCC;
 }
 
 a
@@ -33,7 +33,7 @@ p.error
 
 #global_header
 {
-    background: #CCCCCC;
+    background: #EEEEEE;
     padding: 10px 0px 10px 0px;
     margin: 0 auto;
     border-top: 1px solid #00b3eb;
@@ -66,6 +66,7 @@ p.error
     height: 20px;
     border-top: 1px solid #00b3eb;
     box-shadow: 0px 1px 2px  #000000;
+    font-size: 110%;
 }
 
 #main_menu a:hover
@@ -99,7 +100,6 @@ p.error
 #horizontal_list a
 {
     color: #EEEEEE;
-    font-weight: bold;
     text-decoration: none;
     padding-left: 20px;
     padding-right: 20px;
@@ -107,9 +107,9 @@ p.error
 
 .content_box
 {
-    background: #DDDDDD;
+    background: #EEEEEE;
     border-radius: 5px;
-    box-shadow: 0px 0px 4px #000000;
+    box-shadow: 0px 0px 4px #555555;
 }
 
 .restrict_and_center
@@ -121,6 +121,23 @@ p.error
 .pad
 {
     padding: 5px;
+}
+
+.form_button {
+    color: #FFFFFF;
+    font-size: 100%;
+    padding: 10px 10px 10px 10px;
+    border: none;
+    background-color: rgba(200,200,200,0.6);
+    text-decoration: none;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.15) inset,0 0 6px rgba(0,0,0,.2) inset;
+}
+
+.form_button:hover
+{
+    box-shadow: 0 0 0 2px rgba(0,0,0,.20) inset,0 0 6px rgba(0,0,0,.5) inset;
 }
 
 .cf:before,

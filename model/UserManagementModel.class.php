@@ -35,6 +35,11 @@ class UserManagementModel extends Model
             $this->authenticate_username($username);
         }
     }
+
+    public function get_users_array()
+    {
+        return $this->_user_mapper->get_all();
+    }
 }
 
 ?>

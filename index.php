@@ -24,7 +24,18 @@ $map = array(
         'model' => 'ArticleManagementModel',
         'controller' => 'ArticleManagementController',
         'view' => 'SubmitArticleView'
-    )
+    ),
+    'manage_users' => array(
+        'model' => 'UserManagementModel',
+        'controller' => 'UserManagementController',
+        'view' => 'UserManagementView'
+    ),
+    // special case: blank view for jQuery.post() result
+    'manage_users_submit' => array(
+        'model' => 'UserManagementModel',
+        'controller' => 'UserManagementController',
+        'view' => 'BlankView'
+    ),
 );
 
 $model = null;

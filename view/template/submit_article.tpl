@@ -32,6 +32,20 @@ if ($data['show_form'])
                 <option value="column article">column article</option>
             </select>
             <input type="text" id="column_name" name="column_name" placeholder="Column name" style="visibility:hidden"/>
+            <select name="review_score" id="review_score" style="visibility:hidden">
+                <option value="">Select review score...</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
         </div>
         <h3>Additional Authors</h3>
         <div>
@@ -43,7 +57,7 @@ if ($data['show_form'])
         </div>
         <h3>Submit!</h3>
         <div>
-            <input type="submit" />
+            <input type="submit" class="form_button"/>
         </div>  
     </div>
 </form>
@@ -58,7 +72,14 @@ if ($data['show_form'])
 
     $('#type_selector').change(function() {
         if ($(this).val() === 'column article') {
+            $('#review_score').css('visibility', 'hidden');
             $('#column_name').css('visibility', 'visible');
+        } else if ($(this).val() === 'review') {
+            $('#column_name').css('visibility', 'hidden');
+            $('#review_score').css('visibility', 'visible');
+        } else if ($(this).val() === 'article') {
+            $('#review_score').css('visibility', 'hidden');
+            $('#column_name').css('visibility', 'hidden');
         }
     });
 </script>
