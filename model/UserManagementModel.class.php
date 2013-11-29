@@ -40,6 +40,16 @@ class UserManagementModel extends Model
     {
         return $this->_user_mapper->get_all();
     }
+
+    public function change_type_multiple(array $users, $type)
+    {
+        foreach ($users as $username)
+        {
+            $user = $this->_user_mapper->find_by_id($username);
+            $user->type = $type;
+            $this->_user_mapper->update($user);
+        }
+    }
 }
 
 ?>

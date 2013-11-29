@@ -34,7 +34,7 @@ $map = array(
     'manage_users_submit' => array(
         'model' => 'UserManagementModel',
         'controller' => 'UserManagementController',
-        'view' => 'BlankView'
+        'view' => 'ErrorView'
     ),
 );
 

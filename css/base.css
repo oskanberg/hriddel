@@ -140,14 +140,75 @@ p.error
     box-shadow: 0 0 0 2px rgba(0,0,0,.20) inset,0 0 6px rgba(0,0,0,.5) inset;
 }
 
+#user_list ul
+{
+    width: 100%;
+    padding: 0 0 0 0;
+    margin: 0 auto;
+}
+#user_list span.username
+{
+    display: inline-block;
+    width: 30%;
+}
+#user_list span.full_name
+{
+    display: inline-block;
+    width: 40%;
+}
+#user_list span.type
+{
+    display: inline-block;
+    width: 30%;
+}
+#user_list li
+{
+    color: #FFFFFF;
+    list-style: none;
+    border-radius: 2px;
+    padding: 10px;
+    margin: 10px 0 10px 0;
+    border: 5px solid rgba(0,0,0,0);
+    cursor: pointer;
+}
+li.subscriber
+{
+    background: rgba(80, 0, 80, .6);
+}
+li.writer
+{
+    background: rgba(25, 25, 60, .6);
+}
+li.publisher
+{
+    background: rgba(25, 60, 25, .6);
+}
+li.editor
+{
+    background: rgba(60, 25, 25, .6);
+}
+#user_list li.title
+{
+    background: rgba(0,0,0,0);
+    color: #444444;
+    font-weight: bold;
+}
+#user_list li.selected
+{
+    border: 5px dotted rgba(0,0,0,0.7);
+}
+
 .cf:before,
-.cf:after {
+.cf:after
+{
     content: " "; /* 1 */
     display: table; /* 2 */
 }
-.cf:after {
+.cf:after
+{
     clear: both;
 }
-.cf {
+.cf
+{
     *zoom: 1;
 }

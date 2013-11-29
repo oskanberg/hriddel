@@ -27,9 +27,22 @@ class UserMapper extends AbstractDataMapper
 
     }
 
+    /*
+    * Cannot update username
+    */
     public function update(AbstractObject $obj)
     {
-
+        if (is_null($this->find_by_id($obj->username)))
+        {
+            throw new Exception('User to update not found');
+        }
+        $stmt = 'UPDATE users SET type=:type, name=:name WHERE username=:username';
+        $statement = $this->_database_connection->get_connection()->prepare($stmt);
+        $statement->execute(array(
+            ':username' => $obj->username,
+            ':type' => $obj->type,
+            ':name' => $obj->name,
+        ));
     }
 
     public function get_all()

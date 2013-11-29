@@ -23,6 +23,14 @@ class UserManagementController extends Controller
             $this->_model->register_user($_POST['username'], $_POST['name']);
         }
     }
+    
+    public function change_type_multiple()
+    {
+        if (isset($_POST['users']) && isset($_POST['type']))
+        {
+            $this->_model->change_type_multiple($_POST['users'], $_POST['type']);
+        }
+    }
 }
 
 ?>
