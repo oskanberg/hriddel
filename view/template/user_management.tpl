@@ -34,20 +34,26 @@
         {
             usernames.push($(this).find('.username').text());
         });
-        var jqxhr = $.post(
+        if (usernames.length > 0)
+        {
+            var jqxhr = $.post(
             '?manage_users_submit&action=change_type_multiple',
             {'users': usernames, 'type': role},
             function(data)
             {
-                alert(data);
                 $('#user_list li.selected')
                     .removeClass('selected publisher writer subscriber editor')
                     .addClass(role);
             }
-        )
-        .fail(function() {
-            alert("error");
-        });
+            )
+            .fail(function() {
+                // for the sake of this assessment, this should never happen
+                alert("Internal Server Error. Crap.");
+            });
+        } else {
+            alert('MAKE THIS ERROR NOT AN ANNOYING POPUP');
+        }
+
     }
 </script>
 
