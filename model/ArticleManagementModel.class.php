@@ -103,6 +103,16 @@ class ArticleManagementModel extends Model
     {
         return $this->submit_attempted;
     }
+
+    public function get_articles_array()
+    {
+        $articles = array_merge(
+            $this->column_article_mapper->get_all(),
+            $this->review_mapper->get_all(),
+            $this->article_mapper->get_all()
+        );
+        return $articles;
+    }
 }
 
 ?>

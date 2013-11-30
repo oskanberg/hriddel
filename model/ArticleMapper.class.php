@@ -39,7 +39,21 @@ class ArticleMapper extends AbstractDataMapper
     {
 
     }
-
+    
+    public function get_all()
+    {
+        $stmt = 'SELECT * FROM articles WHERE type="article"';
+        $statement = $this->_database_connection->get_connection()->prepare($stmt);
+        $statement->execute();
+        $articles = array();
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC))
+        {
+            // create array of user objects
+            $articles[] = $this->create_new($row);
+        }
+        return $articles; 
+    }
+    
     protected function _save_to_database(AbstractObject $obj)
     {
         $this->_database_connection->connect();

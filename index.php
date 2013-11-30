@@ -30,10 +30,20 @@ $map = array(
         'controller' => 'UserManagementController',
         'view' => 'UserManagementView'
     ),
-    // special case: blank view for jQuery.post() result
+    'manage_articles' => array(
+        'model' => 'ArticleManagementModel',
+        'controller' => 'ArticleManagementController',
+        'view' => 'ArticleManagementView'
+    ),
+    // special cases: blank view for jQuery.post() result
     'manage_users_submit' => array(
         'model' => 'UserManagementModel',
         'controller' => 'UserManagementController',
+        'view' => 'ErrorView'
+    ),
+    'manage_articles_submit' => array(
+        'model' => 'ArticleManagementModel',
+        'controller' => 'ArticleManagementController',
         'view' => 'ErrorView'
     ),
 );

@@ -41,6 +41,34 @@ class ColumnArticleMapper extends AbstractDataMapper
 
     }
 
+    public function get_all()
+    {
+        $this->_database_connection->connect();
+        $stmt = 'SELECT * FROM articles WHERE type="column article"';
+        $statement = $this->_database_connection->get_connection()->prepare($stmt);
+        $statement->execute();
+        // initialise empty array in case there are none
+        $column_articles = array();
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC))
+        {
+            $new_column_article = $this->create_new($row);
+            $new_column_article->set_id($row['a_id']);
+            $column_articles[] = $new_column_article;
+        }
+        foreach ($column_articles as &$column_article)
+        {
+            $stmt = 'SELECT c_name FROM column_mappings WHERE a_id=:article_id';
+            $statement->execute(array(
+                'article_id' => $column_article->get_id()
+            ));
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+            $column_article->column_name = $result['c_name'];
+        }
+
+        $this->_database_connection->close_connection();
+        return $column_articles; 
+    }
+
     protected function _save_to_database(AbstractObject $obj)
     {
         $this->_database_connection->connect();

@@ -36,6 +36,7 @@ class UserMapper extends AbstractDataMapper
         {
             throw new Exception('User to update not found');
         }
+        $this->_database_connection->connect();
         $stmt = 'UPDATE users SET type=:type, name=:name WHERE username=:username';
         $statement = $this->_database_connection->get_connection()->prepare($stmt);
         $statement->execute(array(
@@ -47,6 +48,7 @@ class UserMapper extends AbstractDataMapper
 
     public function get_all()
     {
+        $this->_database_connection->connect();
         $stmt = 'SELECT * FROM users';
         $statement = $this->_database_connection->get_connection()->prepare($stmt);
         $statement->execute();
@@ -55,6 +57,7 @@ class UserMapper extends AbstractDataMapper
             // create array of user objects
             $users[] = $this->create_new($row);
         }
+        $this->_database_connection->close_connection();
         return $users;
     }
     
@@ -76,8 +79,10 @@ class UserMapper extends AbstractDataMapper
                     'name' => $result['name'],
                     'type' => $result['type']
                 );
+                $this->_database_connection->close_connection();
                 return $this->create_new($data);
             } else {
+                $this->_database_connection->close_connection();
                 return null;
             }
             

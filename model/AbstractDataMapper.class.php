@@ -13,6 +13,7 @@ abstract class AbstractDataMapper
     abstract public function save(AbstractObject $obj);
     abstract public function delete(AbstractObject $obj);
     abstract public function update(AbstractObject $obj);
+    abstract public function get_all();
     abstract public function find_by_id($id);
     abstract protected function _save_to_database(AbstractObject $obj);
 }

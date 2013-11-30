@@ -41,6 +41,65 @@ class ReviewMapper extends AbstractDataMapper
 
     }
 
+    private function get_review_score($a_id)
+    {
+        $stmt = 'SELECT score FROM review_scores WHERE a_id=:review_id';
+        $statement = $this->_database_connection->get_connection()->prepare($stmt);
+        $statement->execute(array(
+            'review_id' => $a_id
+        ));
+        $authors = array();
+        $user_mapper = new UserMapper($this->_database_connection);
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result['score'];
+    }
+    
+    private function get_authors($a_id)
+    {
+        try
+        {
+            $auth_stmt = 'SELECT username FROM authorship WHERE a_id=:review_id';
+            $auth_statement = $this->_database_connection->get_connection()->prepare($auth_stmt);
+            $auth_statement->execute(array(
+                'review_id' => $a_id
+            ));
+            $authors = array();
+            $user_mapper = new UserMapper($this->_database_connection);
+            while ($row = $auth_statement->fetch(PDO::FETCH_ASSOC))
+            {
+                $authors[] = $user_mapper->find_by_id($row['username']);
+            }
+            return $authors;
+        } catch(PDOException $e) {
+            $this->_database_connection->close_connection();
+            echo 'ERROR: ' . $e->getMessage();
+        }
+    }
+
+    public function get_all()
+    {
+        try
+        {
+            $this->_database_connection->connect();
+            $stmt = 'SELECT * FROM articles WHERE type="review"';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->execute();
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC))
+            {
+                $row['authors'] = $this->get_authors($row['a_id']);
+                $row['review_score'] = $this->get_review_score($row['a_id']);
+                $new_review = $this->create_new($row);
+                $new_review->set_id($row['a_id']);
+                $reviews[] = $new_review;
+            }
+            $this->_database_connection->close_connection();
+            return $reviews;
+        } catch(PDOException $e) {
+            $this->_database_connection->close_connection();
+            echo 'ERROR: ' . $e->getMessage();
+        }
+    }
+    
     protected function _save_to_database(AbstractObject $obj)
     {
         $this->_database_connection->connect();

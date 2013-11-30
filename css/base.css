@@ -16,6 +16,11 @@ p.error
     color: red;
 }
 
+p.success
+{
+    color: green;
+}
+
 *
 {
     margin: 0;
@@ -140,28 +145,28 @@ p.error
     box-shadow: 0 0 0 2px rgba(0,0,0,.20) inset,0 0 6px rgba(0,0,0,.5) inset;
 }
 
-#user_list ul
+#item_list ul
 {
     width: 100%;
     padding: 0 0 0 0;
     margin: 0 auto;
 }
-#user_list span.username
+#item_list span.username, span.type
 {
     display: inline-block;
     width: 30%;
 }
-#user_list span.full_name
+#item_list span.full_name
 {
     display: inline-block;
     width: 40%;
 }
-#user_list span.type
+#item_list span.article-type, span.authors, span.title, span.status
 {
     display: inline-block;
-    width: 30%;
+    width: 25%;
 }
-#user_list li
+#item_list li
 {
     color: #FFFFFF;
     list-style: none;
@@ -170,12 +175,19 @@ p.error
     margin: 10px 0 10px 0;
     border: 5px solid rgba(0,0,0,0);
     cursor: pointer;
+    display: none;
 }
-li.subscriber
+
+#item_list li:hover
+{
+    box-shadow: 0 0 0 1px rgba(0,0,0,.15) inset,0 0 6px rgba(0,0,0,.2) inset;
+}
+
+li .subscriber, .submitted
 {
     background: rgba(80, 0, 80, .6);
 }
-li.writer
+li .writer, .awaiting_changes
 {
     background: rgba(25, 25, 60, .6);
 }
@@ -187,15 +199,77 @@ li.editor
 {
     background: rgba(60, 25, 25, .6);
 }
-#user_list li.title
+#item_list li.title
 {
     background: rgba(0,0,0,0);
     color: #444444;
     font-weight: bold;
 }
-#user_list li.selected
+#item_list li.title:hover
+{
+    cursor: auto;
+}
+#item_list li.guidance_message
+{
+    background: rgba(0,0,0,0);
+    color: #444444;
+    font-weight: bold;
+    display:inherit;
+}
+#item_list li.selected
 {
     border: 5px dotted rgba(0,0,0,0.7);
+}
+
+#management
+{
+    width: 100%;
+}
+
+#management_menu
+{
+    vertical-align: top;
+    display: inline-block;
+    margin: 10px 10px 10px 10px;
+    width: 710px;
+}
+
+#management_menu .buttons
+{
+    text-align: center;
+    display: none;
+}
+
+#management_selectors
+{
+    vertical-align: top;
+    border-right: 2px solid rgba(50,50,50,0.5);
+    margin: 10px 10px 10px 10px;
+    display: inline-block;
+    width: 192px;
+}
+#management_selectors li
+{
+    color: #444444;
+    background: rgba(200,200,200,0.2);
+    list-style: none;
+    border-radius: 2px;
+    padding: 10px;
+    margin: 10px 0 10px 0;
+    border: none;
+    cursor: pointer;
+}
+#management_selectors li.title
+{
+    font-weight: bold;
+    background: rgba(0,0,0,0);
+    cursor: auto;
+}
+#management_selectors li.selected
+{
+    background: rgba(100,100,100,0.7);
+    color: #FFFFFF;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.15) inset,0 0 6px rgba(0,0,0,.2) inset;
 }
 
 .cf:before,
