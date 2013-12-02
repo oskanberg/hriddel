@@ -3,8 +3,8 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <script type='text/javascript' src='//code.jquery.com/jquery-1.10.1.js'></script>
-        <script type='text/javascript' src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+        <script type="text/javascript" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
         <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
         <link rel="stylesheet" type="text/css" href="/css/base.css" />
         <title><?php echo $data['title']; ?></title>

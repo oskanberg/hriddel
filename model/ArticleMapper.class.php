@@ -30,28 +30,74 @@ class ArticleMapper extends AbstractDataMapper
 
     }
 
+    /*
+    * assume we won't change any article type-specific attributes
+    */
     public function update(AbstractObject $obj)
     {
-
+        echo $obj->status;
+        try
+        {
+            $this->_database_connection->connect();
+            $stmt = 'UPDATE articles SET contents=:contents, status=:status, title=:title, cover_image=:cover_image WHERE a_id=:a_id';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->execute(array(
+                ':contents' => $obj->contents,
+                ':status' => $obj->status,
+                ':title' => $obj->title,
+                ':cover_image' => $obj->cover_image,
+                ':a_id' => $obj->get_id()
+            ));
+            $this->_database_connection->close_connection();
+        } catch(PDOException $e) {
+            $this->_database_connection->close_connection();
+            echo 'ERROR: ' . $e->getMessage();
+        }
     }
     
-    public function find_by_id($id)
+    public function find_by_id($a_id)
     {
-
+        $this->_database_connection->connect();
+        try
+        {
+            $stmt = 'SELECT * FROM articles WHERE a_id=:a_id';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->execute(array(
+                ':a_id' => $a_id
+            ));
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+            $this->_database_connection->close_connection();
+            $result['authors'] = $this->_get_authors($a_id);
+            $article = $this->create_new($result);
+            $article->set_id($a_id);
+            return $article;
+        } catch(PDOException $e) {
+            $this->_database_connection->close_connection();
+            echo 'ERROR: ' . $e->getMessage();
+        }
     }
     
     public function get_all()
     {
-        $stmt = 'SELECT * FROM articles WHERE type="article"';
-        $statement = $this->_database_connection->get_connection()->prepare($stmt);
-        $statement->execute();
-        $articles = array();
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC))
+        try
         {
-            // create array of user objects
-            $articles[] = $this->create_new($row);
+            $this->_database_connection->connect();
+            $stmt = 'SELECT * FROM articles WHERE type="article"';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->execute();
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC))
+            {
+                $row['authors'] = $this->_get_authors($row['a_id']);
+                $new_article = $this->create_new($row);
+                $new_article->set_id($row['a_id']);
+                $articles[] = $new_article;
+            }
+            $this->_database_connection->close_connection();
+            return $articles;
+        } catch(PDOException $e) {
+            $this->_database_connection->close_connection();
+            echo 'ERROR: ' . $e->getMessage();
         }
-        return $articles; 
     }
     
     protected function _save_to_database(AbstractObject $obj)

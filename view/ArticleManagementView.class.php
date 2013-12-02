@@ -12,8 +12,7 @@ class ArticleManagementView extends View
             'view_specific_template' => $this->template,
         );
         
-        $users = $this->_model->get_articles_array();
-        $data['articles'] = $users;
+        $data['articles'] = $this->_model->get_articles_array_restricted();
         include_once(TEMPLATE_PATH . 'base_template.tpl');
     }
 }

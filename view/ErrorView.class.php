@@ -6,7 +6,7 @@ class ErrorView extends View
     {
         if ($this->_model->error_exists())
         {
-            json_encode($this->_model->get_error_string());
+            echo $this->_model->get_error_string();
         }
     }
 }

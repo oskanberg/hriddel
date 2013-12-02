@@ -34,7 +34,7 @@ abstract class Model
         {
             return $this->_error_string;
         } else {
-            return ''; // might change this to exception
+            return 'No error.'; // might change this to exception
         }
     }
     
@@ -65,6 +65,11 @@ abstract class Model
             $user = $this->_user_mapper->find_by_id($_SESSION['username']);
             return $user;
         }
+    }
+
+    public function get_logged_in_type()
+    {
+        return $this->get_logged_in_user()->type;
     }
     
     public function can_current_user_submit_articles()

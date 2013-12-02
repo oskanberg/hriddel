@@ -163,6 +163,7 @@ p.success
 }
 #item_list span.article-type, span.authors, span.title, span.status
 {
+    vertical-align: top;
     display: inline-block;
     width: 25%;
 }
@@ -183,19 +184,19 @@ p.success
     box-shadow: 0 0 0 1px rgba(0,0,0,.15) inset,0 0 6px rgba(0,0,0,.2) inset;
 }
 
-li .subscriber, .submitted
+li.subscriber, li.submitted
 {
     background: rgba(80, 0, 80, .6);
 }
-li .writer, .awaiting_changes
+li.writer, li.awaiting_changes
 {
     background: rgba(25, 25, 60, .6);
 }
-li.publisher
+li.publisher, li.under_review
 {
     background: rgba(25, 60, 25, .6);
 }
-li.editor
+li.editor, li.published
 {
     background: rgba(60, 25, 25, .6);
 }

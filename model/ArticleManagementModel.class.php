@@ -104,6 +104,42 @@ class ArticleManagementModel extends Model
         return $this->submit_attempted;
     }
 
+    /*
+    * return array of articles that the current user
+    * has permissions to manage
+    */
+    public function get_articles_array_restricted()
+    {
+        if ($this->is_user_logged_in())
+        {
+            $user_type = $this->get_logged_in_user()->type;
+            if ($user_type == 'subscriber')
+            {
+                return array();
+            } else if ($user_type == 'writer') {
+                // only return articles by the writer
+                $all = $this->get_articles_array();
+                $mine = array();
+                foreach ($all as $article)
+                {
+                    foreach ($article->authors as $author)
+                    {
+                        if ($author->username == $this->get_logged_in_username())
+                        {
+                            $mine[] = $article;
+                        }
+                    }
+                }
+                return $mine;
+            } else {
+                // publishers and editors can see all articles
+                return $this->get_articles_array();
+            }
+        } else {
+            return array();
+        }
+    }
+
     public function get_articles_array()
     {
         $articles = array_merge(
@@ -112,6 +148,29 @@ class ArticleManagementModel extends Model
             $this->article_mapper->get_all()
         );
         return $articles;
+    }
+
+    public function update_article_status($a_id, $new_status)
+    {
+        $mappers = array($this->article_mapper, $this->review_mapper, $this->column_article_mapper);
+        $successful_mapper = null;
+        $article = null;
+        foreach ($mappers as $mapper)
+        {
+            $article = $mapper->find_by_id($a_id);
+            if (!is_null($article))
+            {
+                $successful_mapper = $mapper;
+                break;
+            }
+        }
+        if (is_null($article))
+        {
+            $this->_record_error('No such article (id ' . $a_id . ') was found');
+            return null;
+        }
+        $article->status = $new_status;
+        $successful_mapper->update($article);
     }
 }
 

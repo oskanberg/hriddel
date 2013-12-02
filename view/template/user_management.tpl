@@ -18,6 +18,9 @@
             <li class="guidance_message">
                 <p style="text-align:center">please apply a selector on the left</p>
             </li>
+            <li class="none_found_message">
+                <p style="text-align:center">no matching users</p>
+            </li>
             <?php
             foreach ($data['users'] as $user)
             {
@@ -39,7 +42,7 @@
     </div>
 </div>
 <script type="text/javascript">
-    $("#item_list li").not('.guidance_message').click(function()
+    $('#item_list li').not('.guidance_message .none_found_message').click(function()
     {
         // if already selected, it might be an element
         // that should otherwise be hidden
@@ -57,14 +60,22 @@
         $('p.error').text('');
         $('p.success').text('');
     });
-    $("#management_selectors li").not('.title').click(function()
+    $('#management_selectors li').not('.title').click(function()
     {
-        $('#item_list li.guidance_message').hide();
-        $('#item_list li.title').show();
-        $('#management_menu .buttons').show();
-        
-        var type = $(this).attr('id');
         $(this).toggleClass('selected');
+        if ($('#management_selectors li.selected').length > 0)
+        {
+            $('#item_list li.guidance_message').hide();
+            $('#item_list li.title').show();
+            $('#management_menu .buttons').show();
+        } else {
+            $('#item_list li.none_found_message').hide();
+            $('#item_list li.guidance_message').show();
+            $('#item_list li.title').hide();
+            $('#management_menu .buttons').hide();
+        }
+
+        var type = $(this).attr('id');
         if ($(this).hasClass('selected'))
         {
             $('.' + type).show('slow');
@@ -76,7 +87,7 @@
     function assign_role(role)
     {
         var usernames = new Array();
-        $("#item_list li.selected").each(function()
+        $('#item_list li.selected').each(function()
         {
             usernames.push($(this).find('.username').text());
         });

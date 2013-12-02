@@ -20,8 +20,19 @@ class ArticleManagementController extends Controller
                 }
                 $this->_model->submit_article($_POST['title'], $_POST['content'], $_POST['type'], $_POST['additional_authors'], $_POST['cover_image'], null, $_POST['review_score']);
             } else {
-                $this->_model->submit_article($_POST['title'], $_POST['content'], $_POST['type'], $_POST['additional_authors'], $_POST['cover_image']);
+                $this->_model->submit_article($_POST['title'], $_POST['content'], $_POST['type'], $_POST['additional_authors'], $_POST['cover_image'], null, null);
             }
+        } else {
+            echo 'stuff not set';
+            var_dump($_POST);
+        }
+    }
+
+    public function change_article_status()
+    {
+        if (isset($_POST['a_id']) && isset($_POST['new_status']))
+        {
+            $this->_model->update_article_status($_POST['a_id'], $_POST['new_status']);
         } else {
             echo 'stuff not set';
             var_dump($_POST);
