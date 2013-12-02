@@ -1,9 +1,9 @@
 <?php
 
-class SubmitArticleView extends View
+class EditArticleView extends View
 {
-    private $template = 'submit_article.tpl';
-    private $title = 'Submit Article';
+    private $template = 'edit_article.tpl';
+    private $title = 'Edit Article';
 
     public function display()
     {
@@ -15,6 +15,8 @@ class SubmitArticleView extends View
             'show_result' => false
         );
         $data['authors'] = $this->_model->get_all_possible_authors();
+        $data['article'] = $this->_model->get_article_by_id($_GET['a_id']);
+        $data['comments'] = $this->_model->get_article_comments($_GET['a_id']);
         if ($this->_model->has_submit_been_attempted())
         {
             if ($this->_model->error_exists())

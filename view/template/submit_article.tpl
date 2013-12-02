@@ -14,16 +14,16 @@ if ($data['show_form'])
 ?>
 <form action="?submit&action=submit_article" method="post">        
     <div id="accordion" style="display:none;">
-        <h3>Title</h3>
+        <h3>title</h3>
         <div>
-            <input type="text" class="tabit" name="title" style="width:99%" placeholder="Title" autofocus/>
+            <input type="text" name="title" style="width:99%" placeholder="Title" autofocus/>
         </div>
-        <h3>Article Content</h3>
+        <h3>article content</h3>
         <div>
-            <textarea name="content" class="tabit" placeholder="Article content" style="height:250px; width:99%">
+            <textarea name="content" placeholder="Article content" style="height:250px; width:99%">
             </textarea>
         </div>
-        <h3>Article Type</h3>
+        <h3>article type</h3>
         <div id="selector">
             <select name="type" id="type_selector">
                 <option value="">Select article type...</option>
@@ -47,18 +47,31 @@ if ($data['show_form'])
                 <option value="10">10</option>
             </select>
         </div>
-        <h3>Additional Authors</h3>
+        <h3>additional authors</h3>
         <div>
-            <input type="text" class="tabit" name="additional_authors" style="width:99%" placeholder="Additional authors"/>
+            <select id="author_list">
+                <option value="placeholder">Add additional author ...</option>
+                <?php
+                foreach ($data['authors'] as $author)
+                {
+                    if ($author->username != $this->_model->get_logged_in_username())
+                    {
+                        echo '<option value="' . $author->username . '">';
+                        echo $author->username . '</option>';
+                    }
+                }
+                ?>
+            </select>
+            <input type="text" id="additional_authors" name="additional_authors" style="width:99%" placeholder="Additional authors"/>
         </div>
-        <h3>Cover Image</h3>
+        <h3>cover image</h3>
         <div>
-            <input type="text" class="tabit" name="cover_image" style="width:99%"placeholder="Link to cover image"/>
+            <input type="text" name="cover_image" style="width:99%"placeholder="Link to cover image"/>
         </div>
-        <h3>Submit!</h3>
+        <h3>submit!</h3>
         <div>
-            <input type="submit" class="tabit" class="form_button"/>
-        </div>  
+            <input type="submit" class="form_button"/>
+        </div>
     </div>
 </form>
 <script type="text/javascript">
@@ -77,7 +90,7 @@ if ($data['show_form'])
         var key = e.which;
         if (key == 9) { 
             e.preventDefault();
-            if ($('*:focus').siblings(':visible').not('#type_selector').length > 0)
+            if ($('*:focus').siblings(':visible').not('#type_selector').not('#author_list').length > 0)
             {
                 console.log($('*:focus').siblings(':visible'));
                 // there's an input after the focused one
@@ -88,8 +101,10 @@ if ($data['show_form'])
             }
         }
     });
-    $('#type_selector').change(function() {
-        if ($(this).val() === 'column article') {
+    $('#type_selector').change(function()
+    {
+        if ($(this).val() === 'column article')
+        {
             $('#review_score').hide();
             $('#column_name').show();
         } else if ($(this).val() === 'review') {
@@ -98,6 +113,23 @@ if ($data['show_form'])
         } else if ($(this).val() === 'article') {
             $('#review_score').hide()
             $('#column_name').hide();
+        }
+    });
+    $('#author_list').change(function()
+    {
+        var content = $('#additional_authors').val();
+        var selected = $('#author_list option:selected').val();
+        if (selected != 'placeholder')
+        {
+            if (content === '')
+            {
+                content = selected;
+            } else {
+                content = content + ';' + selected;
+            }
+            $('#additional_authors').val(content);
+            $('._statusDDL').val('0');
+            $('#author_list option[value="' + selected +'"]').remove();
         }
     });
 </script>

@@ -5,6 +5,8 @@ class ArticleManagementModel extends Model
     private $submit_attempted = false;
     private $column_article_mapper;
     private $review_mapper;
+    private $user_mapper;
+    private $comment_mapper;
 
     public function __construct()
     {
@@ -12,6 +14,8 @@ class ArticleManagementModel extends Model
         $this->article_mapper = new ArticleMapper($this->_database_connection);
         $this->column_article_mapper = new ColumnArticleMapper($this->_database_connection);
         $this->review_mapper = new ReviewMapper($this->_database_connection);
+        $this->user_mapper = new UserMapper($this->_database_connection);
+        $this->comment_mapper = new CommentMapper($this->_database_connection);
     }
     
     public function submit_article($title, $content, $type, $additional_authors, $cover_image, $column_name, $review_score)
@@ -25,9 +29,16 @@ class ArticleManagementModel extends Model
             // the relevant error(s) will already have been recorded
             return null;
         } */
+
+        $authors = array();
+        $authors[] = $this->get_logged_in_user();
+        foreach ($additional_authors as $username)
+        {
+            $authors[] = $this->user_mapper->find_by_id($username);
+        }
         $data = array(
             'contents' => $content,
-            'authors' => array($this->get_logged_in_user()),
+            'authors' => $authors,
             'title' => $title,
             'type' => $type,
             'status' => 'submitted',
@@ -171,6 +182,30 @@ class ArticleManagementModel extends Model
         }
         $article->status = $new_status;
         $successful_mapper->update($article);
+    }
+
+    public function get_all_possible_authors()
+    {
+        $users = $this->user_mapper->get_all();
+        $possible_authors = array();
+        foreach ($users as $user)
+        {
+            if ($user->type != 'subscriber')
+            {
+                $possible_authors[] = $user;
+            }
+        }
+        return $possible_authors;
+    }
+
+    public function get_article_by_id($article_id)
+    {
+        return $this->article_mapper->find_by_id($article_id);
+    }
+
+    public function get_article_comments($article_id)
+    {
+        return $this->comment_mapper->find_all_by_article_id($article_id);
     }
 }
 

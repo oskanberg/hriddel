@@ -35,6 +35,11 @@ $map = array(
         'controller' => 'ArticleManagementController',
         'view' => 'ArticleManagementView'
     ),
+    'edit_article' => array(
+        'model' => 'ArticleManagementModel',
+        'controller' => 'ArticleManagementController',
+        'view' => 'EditArticleView'
+    ),
     // special cases: blank view for jQuery.post() result
     'manage_users_submit' => array(
         'model' => 'UserManagementModel',
