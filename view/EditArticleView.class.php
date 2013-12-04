@@ -12,11 +12,33 @@ class EditArticleView extends View
             'view_specific_template' => $this->template,
             'show_form' => true,
             'show_error' => false,
-            'show_result' => false
+            'show_result' => false,
+            'show_review_score' => false,
+            'show_column_name' => false
+
         );
-        $data['authors'] = $this->_model->get_all_possible_authors();
         $data['article'] = $this->_model->get_article_by_id($_GET['a_id']);
+        if ($data['article'] instanceof Review)
+        {
+            $data['show_review_score'] = true;
+        } else if ($data['article'] instanceof ColumnArticle)
+        {
+            $data['show_column_name'] = true;
+        }
         $data['comments'] = $this->_model->get_article_comments($_GET['a_id']);
+        $data['additional_author_possibilities'] = array();
+        $current_article_author_usernames = array();
+        foreach ($data['article']->authors as $author)
+        {
+            $current_article_author_usernames[] = $author->username;
+        }
+        foreach ($this->_model->get_all_possible_authors() as $author)
+        {
+            if (!in_array($author->username, $current_article_author_usernames))
+            {
+                $data['additional_author_possibilities'][] = $author;
+            }
+        }
         if ($this->_model->has_submit_been_attempted())
         {
             if ($this->_model->error_exists())

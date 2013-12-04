@@ -20,8 +20,7 @@ if ($data['show_form'])
         </div>
         <h3>article content</h3>
         <div>
-            <textarea name="content" placeholder="Article content" style="height:250px; width:99%">
-            </textarea>
+            <textarea name="content" placeholder="Article content" style="height:250px; width:99%"></textarea>
         </div>
         <h3>article type</h3>
         <div id="selector">

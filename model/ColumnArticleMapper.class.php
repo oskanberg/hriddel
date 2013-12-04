@@ -7,7 +7,7 @@ class ColumnArticleMapper extends AbstractDataMapper
         if(!is_null($data))
         {
             $new_column_article = new ColumnArticle();
-            $new_column_article->contents = $data['contents'];
+            $new_column_article->content = $data['content'];
             $new_column_article->authors = $data['authors'];
             $new_column_article->title = $data['title'];
             $new_column_article->type = $data['type'];
@@ -33,7 +33,30 @@ class ColumnArticleMapper extends AbstractDataMapper
 
     public function update(AbstractObject $obj)
     {
+        try
+        {
+            $this->_database_connection->connect();
+            $stmt = 'UPDATE articles SET content=:content, status=:status, title=:title, cover_image=:cover_image WHERE a_id=:a_id';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->execute(array(
+                ':content' => $obj->content,
+                ':status' => $obj->status,
+                ':title' => $obj->title,
+                ':cover_image' => $obj->cover_image,
+                ':a_id' => $obj->get_id()
+            ));
 
+            $stmt = 'UPDATE column_mappings SET c_name=:c_name WHERE a_id=:a_id';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->execute(array(
+                ':score' => $obj->column_name,
+                ':a_id' => $obj->get_id()
+            ));
+            $this->_database_connection->close_connection();
+        } catch(PDOException $e) {
+            $this->_database_connection->close_connection();
+            echo 'ERROR: ' . $e->getMessage();
+        }
     }
     
     public function find_by_id($id)
@@ -41,6 +64,16 @@ class ColumnArticleMapper extends AbstractDataMapper
 
     }
 
+    private function get_column_name($a_id)
+    {
+        $stmt = 'SELECT c_name FROM column_mappings WHERE a_id=:article_id';
+        $statement->execute(array(
+            'article_id' => $a_id
+        ));
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result['c_name'];
+    }
+    
     public function get_all()
     {
         $this->_database_connection->connect();
@@ -51,20 +84,12 @@ class ColumnArticleMapper extends AbstractDataMapper
         $column_articles = array();
         while ($row = $statement->fetch(PDO::FETCH_ASSOC))
         {
+            $row['column_name'] = $this->get_column_name($row['a_id']);
+            $row['authors'] = $this->_get_authors($row['a_id']);
             $new_column_article = $this->create_new($row);
             $new_column_article->set_id($row['a_id']);
             $column_articles[] = $new_column_article;
         }
-        foreach ($column_articles as &$column_article)
-        {
-            $stmt = 'SELECT c_name FROM column_mappings WHERE a_id=:article_id';
-            $statement->execute(array(
-                'article_id' => $column_article->get_id()
-            ));
-            $result = $statement->fetch(PDO::FETCH_ASSOC);
-            $column_article->column_name = $result['c_name'];
-        }
-
         $this->_database_connection->close_connection();
         return $column_articles; 
     }
@@ -74,10 +99,10 @@ class ColumnArticleMapper extends AbstractDataMapper
         $this->_database_connection->connect();
         try
         {
-            $stmt = 'INSERT INTO articles (contents, status, title, publish_date, type, cover_image) VALUES (:contents, :status, :title, CURDATE(), :type, :cover_image)';
+            $stmt = 'INSERT INTO articles (content, status, title, publish_date, type, cover_image) VALUES (:content, :status, :title, CURDATE(), :type, :cover_image)';
             $statement = $this->_database_connection->get_connection()->prepare($stmt);
             $statement->execute(array(
-                ':contents' => $obj->contents,
+                ':content' => $obj->content,
                 ':status' => $obj->status,
                 ':title' => $obj->title,
                 ':type' => $obj->type,

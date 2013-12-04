@@ -7,8 +7,8 @@ class CommentMapper extends AbstractDataMapper
         if(!is_null($data))
         {
             $comment = new Comment();
-            $comment->contents = $data['contents'];
-            $comment->author = $data['author'];
+            $comment->content = $data['content'];
+            $comment->username = $data['username'];
             $comment->a_id = $data['a_id'];
             return $comment;
         } else {
@@ -31,10 +31,31 @@ class CommentMapper extends AbstractDataMapper
     {
 
     }
+
+    public function get_all()
+    {
+        
+    }
     
     public function find_by_id($id)
     {
-
+        try
+        {
+            $this->_database_connection->connect();
+            $stmt = 'SELECT * FROM editor_comments';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->execute();
+            $comments = array();
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC))
+            {
+                $comments[] = create_new($row);
+            }
+            $this->_database_connection->close_connection();
+            return $comments;
+        } catch(PDOException $e) {
+            $this->_database_connection->close_connection();
+            echo 'ERROR: ' . $e->getMessage();
+        }
     }
 
     public function find_all_by_article_id($article_id)
@@ -50,7 +71,7 @@ class CommentMapper extends AbstractDataMapper
             $comments = array();
             while ($row = $statement->fetch(PDO::FETCH_ASSOC))
             {
-                $comments[] = create_new($row);
+                $comments[] = $this->create_new($row);
             }
             $this->_database_connection->close_connection();
             return $comments;
@@ -67,7 +88,7 @@ class CommentMapper extends AbstractDataMapper
             $stmt = 'SELECT time FROM editor_comments WHERE ec_id=:id';
             $statement = $this->_database_connection->get_connection()->prepare($stmt);
             $statement->execute(array(
-                'ec_id' => $id
+                ':id' => $id
             ));
             $result = $statement->fetch(PDO::FETCH_ASSOC);
             return $result['time'];
@@ -83,7 +104,7 @@ class CommentMapper extends AbstractDataMapper
         $this->_database_connection->connect();
         try
         {
-            $stmt = 'INSERT INTO editor_comments (username, a_id, content) VALUES (:username, :a_id, content)';
+            $stmt = 'INSERT INTO editor_comments (username, a_id, content) VALUES (:username, :a_id, :content)';
             $statement = $this->_database_connection->get_connection()->prepare($stmt);
             $statement->execute(array(
                 ':username' => $obj->username,
@@ -92,7 +113,6 @@ class CommentMapper extends AbstractDataMapper
             ));
             
             $this_comment_id = $this->_database_connection->get_connection()->lastInsertID();
-
             $this->_database_connection->close_connection();
             return $this_comment_id;
             

@@ -3,17 +3,14 @@
 class ArticleManagementModel extends Model
 {
     private $submit_attempted = false;
-    private $column_article_mapper;
-    private $review_mapper;
+    private $generic_article_mapper;
     private $user_mapper;
     private $comment_mapper;
 
     public function __construct()
     {
         Model::__construct();
-        $this->article_mapper = new ArticleMapper($this->_database_connection);
-        $this->column_article_mapper = new ColumnArticleMapper($this->_database_connection);
-        $this->review_mapper = new ReviewMapper($this->_database_connection);
+        $this->generic_article_mapper = new GenericArticleMapper($this->_database_connection);
         $this->user_mapper = new UserMapper($this->_database_connection);
         $this->comment_mapper = new CommentMapper($this->_database_connection);
     }
@@ -37,30 +34,17 @@ class ArticleManagementModel extends Model
             $authors[] = $this->user_mapper->find_by_id($username);
         }
         $data = array(
-            'contents' => $content,
+            'content' => $content,
             'authors' => $authors,
             'title' => $title,
             'type' => $type,
             'status' => 'submitted',
-            'cover_image' => $cover_image
+            'cover_image' => $cover_image,
+            'column_name' => $column_name,
+            'review_score' => $review_score
         );
-        if (!is_null($column_name))
-        {
-            // it's a column article
-            $data['column_name'] = $column_name;
-            $column_name = $this->column_article_mapper->create_new($data);
-            $this->column_article_mapper->save($column_name);
-        } else if (!is_null($review_score)) {
-            // it's a reivew
-            $data['review_score'] = $review_score;
-            $new_review = $this->review_mapper->create_new($data);
-            $this->review_mapper->save($new_review);
-        } else {
-            // it's a regular article
-            $data['column_name'] = $column_name;
-            $new_article = $this->article_mapper->create_new($data);
-            $this->article_mapper->save($new_article);
-        }
+        $article = $this->generic_article_mapper->create_new($data);
+        $this->generic_article_mapper->save($article);
     }
 
     /*
@@ -153,33 +137,12 @@ class ArticleManagementModel extends Model
 
     public function get_articles_array()
     {
-        $articles = array_merge(
-            $this->column_article_mapper->get_all(),
-            $this->review_mapper->get_all(),
-            $this->article_mapper->get_all()
-        );
-        return $articles;
+        return $this->generic_article_mapper->get_all();
     }
 
     public function update_article_status($a_id, $new_status)
     {
-        $mappers = array($this->article_mapper, $this->review_mapper, $this->column_article_mapper);
-        $successful_mapper = null;
-        $article = null;
-        foreach ($mappers as $mapper)
-        {
-            $article = $mapper->find_by_id($a_id);
-            if (!is_null($article))
-            {
-                $successful_mapper = $mapper;
-                break;
-            }
-        }
-        if (is_null($article))
-        {
-            $this->_record_error('No such article (id ' . $a_id . ') was found');
-            return null;
-        }
+        $article = $this->generic_article_mapper->create_new();
         $article->status = $new_status;
         $successful_mapper->update($article);
     }
@@ -200,12 +163,39 @@ class ArticleManagementModel extends Model
 
     public function get_article_by_id($article_id)
     {
-        return $this->article_mapper->find_by_id($article_id);
+        return $this->generic_article_mapper->find_by_id($article_id);
     }
 
     public function get_article_comments($article_id)
     {
         return $this->comment_mapper->find_all_by_article_id($article_id);
+    }
+
+    public function add_comment($article_id, $comment)
+    {
+        $data = array(
+            'content' => $comment,
+            'username' => $this->get_logged_in_username(),
+            'a_id' => $article_id
+        );
+        $comment = $this->comment_mapper->create_new($data);
+        $this->comment_mapper->save($comment);
+    }
+
+    public function update_article($title, $content, $additional_authors, $cover_image, $a_id, $review_score, $column_name)
+    {
+        $article = $this->generic_article_mapper->find_by_id($a_id);
+        $article->title = $title;
+        $article->content = $content;
+        $article->additional_authors = $additional_authors;
+        $article->cover_image = $cover_image;
+        if (!is_null($review_score))
+        {
+            $article->review_score = $review_score;
+        } else if (!is_null($column_name)) {
+            $article->column_name = $column_name;
+        }
+        $this->generic_article_mapper->update($article);
     }
 }
 

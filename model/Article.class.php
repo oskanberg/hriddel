@@ -2,7 +2,7 @@
 
 class Article extends AbstractObject
 {
-    public $contents;
+    public $content;
     public $authors;
     public $title;
     public $date;

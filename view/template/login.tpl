@@ -13,7 +13,7 @@ if ($data['show_login'])
 {
 ?>
 <form action="?login&action=authenticate" method="post">
-  <input type="text" name="username" placeholder="Username">
+  <input type="text" name="username" placeholder="Username" autofocus>
   <input type="submit">
 </form>
 <?php

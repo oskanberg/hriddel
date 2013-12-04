@@ -222,6 +222,33 @@ li.editor, li.published
     border: 5px dotted rgba(0,0,0,0.7);
 }
 
+#comment_list ul
+{
+    width: 100%;
+    padding: 0 0 0 0;
+    margin: 0 auto;
+}
+
+#comment_list li
+{
+    color: #FFFFFF;
+    list-style: none;
+    border-radius: 2px;
+    padding: 10px;
+    margin: 10px 0 10px 0;
+    border: 5px solid rgba(0,0,0,0);
+}
+
+#comment_list span.author
+{
+    color: rgba(0,0,0,0.8);
+}
+
+#comment_list span.comment
+{
+    color: rgba(0,0,0,0.5);
+}
+
 #management
 {
     width: 100%;
@@ -275,7 +302,7 @@ li.editor, li.published
 
 #commenting_area
 {
-    width: 470px;
+    width: 370px;
     display: inline-block;
     vertical-align: top;
     text-align: center;

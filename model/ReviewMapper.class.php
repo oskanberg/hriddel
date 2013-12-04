@@ -7,7 +7,7 @@ class ReviewMapper extends AbstractDataMapper
         if(!is_null($data))
         {
             $new_review = new Review();
-            $new_review->contents = $data['contents'];
+            $new_review->content = $data['content'];
             $new_review->authors = $data['authors'];
             $new_review->title = $data['title'];
             $new_review->type = $data['type'];
@@ -33,12 +33,57 @@ class ReviewMapper extends AbstractDataMapper
 
     public function update(AbstractObject $obj)
     {
+        try
+        {
+            $this->_database_connection->connect();
+            $stmt = 'UPDATE articles SET content=:content, status=:status, title=:title, cover_image=:cover_image WHERE a_id=:a_id';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->execute(array(
+                ':content' => $obj->content,
+                ':status' => $obj->status,
+                ':title' => $obj->title,
+                ':cover_image' => $obj->cover_image,
+                ':a_id' => $obj->get_id()
+            ));
 
+            $stmt = 'UPDATE review_scores SET score=:score WHERE a_id=:a_id';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->execute(array(
+                ':score' => $obj->review_score,
+                ':a_id' => $obj->get_id()
+            ));
+            $this->_database_connection->close_connection();
+        } catch(PDOException $e) {
+            $this->_database_connection->close_connection();
+            echo 'ERROR: ' . $e->getMessage();
+        }
     }
     
     public function find_by_id($id)
     {
-
+        $this->_database_connection->connect();
+        try
+        {
+            $stmt = 'SELECT * FROM articles WHERE a_id=:a_id';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->execute(array(
+                ':a_id' => $id
+            ));
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+            if ($result)
+            {
+                $result['review_score'] = $this->get_review_score($id);
+                $result['authors'] = $this->_get_authors($id);
+                $new_review = $this->create_new($result);
+                $new_review->set_id($id);
+                return $new_review;
+            } else {
+                echo 'No review with that id (' . $id . ') found.';
+            }
+        } catch(PDOException $e) {
+            $this->_database_connection->close_connection();
+            echo 'ERROR: ' . $e->getMessage();
+        }
     }
 
     private function get_review_score($a_id)
@@ -61,6 +106,7 @@ class ReviewMapper extends AbstractDataMapper
             $stmt = 'SELECT * FROM articles WHERE type="review"';
             $statement = $this->_database_connection->get_connection()->prepare($stmt);
             $statement->execute();
+            $reviews = array();
             while ($row = $statement->fetch(PDO::FETCH_ASSOC))
             {
                 $row['authors'] = $this->_get_authors($row['a_id']);
@@ -82,10 +128,10 @@ class ReviewMapper extends AbstractDataMapper
         $this->_database_connection->connect();
         try
         {
-            $stmt = 'INSERT INTO articles (contents, status, title, publish_date, type, cover_image) VALUES (:contents, :status, :title, CURDATE(), :type, :cover_image)';
+            $stmt = 'INSERT INTO articles (content, status, title, publish_date, type, cover_image) VALUES (:content, :status, :title, CURDATE(), :type, :cover_image)';
             $statement = $this->_database_connection->get_connection()->prepare($stmt);
             $statement->execute(array(
-                ':contents' => $obj->contents,
+                ':content' => $obj->content,
                 ':status' => $obj->status,
                 ':title' => $obj->title,
                 ':type' => $obj->type,

@@ -7,7 +7,7 @@ class ArticleMapper extends AbstractDataMapper
         if(!is_null($data))
         {
             $new_article = new Article();
-            $new_article->contents = $data['contents'];
+            $new_article->content = $data['content'];
             $new_article->authors = $data['authors'];
             $new_article->title = $data['title'];
             $new_article->type = $data['type'];
@@ -24,7 +24,6 @@ class ArticleMapper extends AbstractDataMapper
         $obj->set_id($this->_save_to_database($obj));
     }
 
-
     public function delete(AbstractObject $obj)
     {
 
@@ -35,14 +34,13 @@ class ArticleMapper extends AbstractDataMapper
     */
     public function update(AbstractObject $obj)
     {
-        echo $obj->status;
         try
         {
             $this->_database_connection->connect();
-            $stmt = 'UPDATE articles SET contents=:contents, status=:status, title=:title, cover_image=:cover_image WHERE a_id=:a_id';
+            $stmt = 'UPDATE articles SET content=:content, status=:status, title=:title, cover_image=:cover_image WHERE a_id=:a_id';
             $statement = $this->_database_connection->get_connection()->prepare($stmt);
             $statement->execute(array(
-                ':contents' => $obj->contents,
+                ':content' => $obj->content,
                 ':status' => $obj->status,
                 ':title' => $obj->title,
                 ':cover_image' => $obj->cover_image,
@@ -85,6 +83,7 @@ class ArticleMapper extends AbstractDataMapper
             $stmt = 'SELECT * FROM articles WHERE type="article"';
             $statement = $this->_database_connection->get_connection()->prepare($stmt);
             $statement->execute();
+            $articles = array();
             while ($row = $statement->fetch(PDO::FETCH_ASSOC))
             {
                 $row['authors'] = $this->_get_authors($row['a_id']);
@@ -105,10 +104,10 @@ class ArticleMapper extends AbstractDataMapper
         $this->_database_connection->connect();
         try
         {
-            $stmt = 'INSERT INTO articles (contents, status, title, publish_date, type, cover_image) VALUES (:contents, :status, :title, CURDATE(), :type, :cover_image)';
+            $stmt = 'INSERT INTO articles (content, status, title, publish_date, type, cover_image) VALUES (:content, :status, :title, CURDATE(), :type, :cover_image)';
             $statement = $this->_database_connection->get_connection()->prepare($stmt);
             $statement->execute(array(
-                ':contents' => $obj->contents,
+                ':content' => $obj->content,
                 ':status' => $obj->status,
                 ':title' => $obj->title,
                 ':type' => $obj->type,

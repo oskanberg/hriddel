@@ -51,6 +51,11 @@ $map = array(
         'controller' => 'ArticleManagementController',
         'view' => 'ErrorView'
     ),
+    'add_comment_submit' => array(
+        'model' => 'ArticleManagementModel',
+        'controller' => 'ArticleManagementController',
+        'view' => 'ErrorView'
+    ),
 );
 
 $model = null;

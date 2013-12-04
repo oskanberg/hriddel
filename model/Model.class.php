@@ -10,7 +10,7 @@ abstract class Model
     public function __construct()
     {
         $host = 'localhost';
-        $database_name = 'iapt';
+        $database_name = 'iapt_assessment';
         $username = 'root';
         $password = 'iaptassessment42';
         $this->_database_connection = new DatabaseConnection($host, $database_name, $username, $password);

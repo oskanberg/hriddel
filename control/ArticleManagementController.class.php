@@ -6,7 +6,7 @@ class ArticleManagementController extends Controller
     {
         if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['type']) && isset($_POST['additional_authors']) && isset($_POST['cover_image']))
         {
-            $additional_authors = explode(';', $_POST['additional_authors']);
+            $additional_authors = array_filter(explode(';', $_POST['additional_authors']));
             if ($_POST['type'] == 'column_article')
             {
                 if (!isset($_POST['column_name']))
@@ -28,12 +28,33 @@ class ArticleManagementController extends Controller
             var_dump($_POST);
         }
     }
+    
+    public function ammend_article()
+    {
+        if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['additional_authors']) && isset($_POST['cover_image']))
+        {
+            $review_score = isset($_POST['review_score']) ? $_POST['review_score'] : null;
+            $column_name = isset($_POST['column_name']) ? $_POST['column_name'] : null;
+            $this->_model->update_article($_POST['title'], $_POST['content'], $_POST['additional_authors'], $_POST['cover_image'], $_GET['a_id'], $review_score, $column_name);
+        }
+    }
 
     public function change_article_status()
     {
         if (isset($_POST['a_id']) && isset($_POST['new_status']))
         {
             $this->_model->update_article_status($_POST['a_id'], $_POST['new_status']);
+        } else {
+            echo 'stuff not set';
+            var_dump($_POST);
+        }
+    }
+
+    public function add_comment()
+    {
+        if (isset($_POST['a_id']) && isset($_POST['comment']))
+        {
+            $this->_model->add_comment($_POST['a_id'], $_POST['comment']);
         } else {
             echo 'stuff not set';
             var_dump($_POST);

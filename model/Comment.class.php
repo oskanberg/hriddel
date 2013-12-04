@@ -2,8 +2,8 @@
 
 class Comment extends AbstractObject
 {
-    public $contents;
-    public $author;
+    public $content;
+    public $username;
     public $a_id;
     public $time;
 }

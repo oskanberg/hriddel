@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE articles (
   a_id int NOT NULL AUTO_INCREMENT,
-  contents text(30000) NOT NULL,
+  content text(30000) NOT NULL,
   status enum ('submitted', 'under review', 'awaiting changes', 'published', 'rejected') NOT NULL,
   title varchar(250) NOT NULL,
   publish_date date NOT NULL,
