@@ -14,6 +14,7 @@ class ColumnArticleMapper extends AbstractDataMapper
             $new_column_article->status = $data['status'];
             $new_column_article->cover_image = $data['cover_image'];
             $new_column_article->column_name = $data['column_name'];
+            $new_column_article->date = $data['publish_date'];
             return $new_column_article;
         } else {
             throw new Exception('Need data.');
@@ -66,11 +67,13 @@ class ColumnArticleMapper extends AbstractDataMapper
 
     private function get_column_name($a_id)
     {
+        $this->_database_connection->connect();
         $stmt = 'SELECT c_name FROM column_mappings WHERE a_id=:article_id';
         $statement->execute(array(
             'article_id' => $a_id
         ));
         $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $this->_database_connection->close_connection();
         return $result['c_name'];
     }
     
@@ -96,9 +99,9 @@ class ColumnArticleMapper extends AbstractDataMapper
 
     protected function _save_to_database(AbstractObject $obj)
     {
-        $this->_database_connection->connect();
         try
         {
+            $this->_database_connection->connect();
             $stmt = 'INSERT INTO articles (content, status, title, publish_date, type, cover_image) VALUES (:content, :status, :title, CURDATE(), :type, :cover_image)';
             $statement = $this->_database_connection->get_connection()->prepare($stmt);
             $statement->execute(array(

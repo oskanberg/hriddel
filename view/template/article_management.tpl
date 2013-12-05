@@ -205,7 +205,7 @@
                 $('#reject_button').show();
                 $('#changes_button').show();
             }
-            if ($.inArray('published', class_list) > -1) {
+            if ($.inArray('published', class_list) > -1 && $.inArray('published', class_list) < 0) {
                 $('#highlight_button').show();
             }
         });

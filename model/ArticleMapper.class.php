@@ -13,6 +13,7 @@ class ArticleMapper extends AbstractDataMapper
             $new_article->type = $data['type'];
             $new_article->status = $data['status'];
             $new_article->cover_image = $data['cover_image'];
+            $new_article->date = $data['publish_date'];
             return $new_article;
         } else {
             throw new Exception('Need data.');

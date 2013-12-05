@@ -13,6 +13,7 @@ abstract class AbstractDataMapper
     {
         try
         {
+            $this->_database_connection->connect();
             $auth_stmt = 'SELECT username FROM authorship WHERE a_id=:article_id';
             $auth_statement = $this->_database_connection->get_connection()->prepare($auth_stmt);
             $auth_statement->execute(array(

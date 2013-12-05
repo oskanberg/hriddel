@@ -71,6 +71,22 @@ class ArticleManagementController extends Controller
             var_dump($_POST);
         }
     }
+
+    public function dislike_article()
+    {
+        if (isset($_POST['a_id']))
+        {
+            $this->_model->dislike_article($this->_model->get_logged_in_user(), $_POST['a_id']);
+        }
+    }
+
+    public function like_article()
+    {
+        if (isset($_POST['a_id']))
+        {
+            $this->_model->like_article($this->_model->get_logged_in_user(), $_POST['a_id']);
+        }
+    }
 }
 
 ?>

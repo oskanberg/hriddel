@@ -210,6 +210,73 @@ class ArticleManagementModel extends Model
         $article = $this->generic_article_mapper->find_by_id($article_id);
         $this->generic_article_mapper->highlight($article);
     }
+
+    public function can_user_like_dislike()
+    {
+        if ($this->is_user_logged_in())
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function like_article($user, $article_id)
+    {
+        $liked_articles = $this->generic_article_mapper->get_all_articles_with_impression_by_user($user, 'like');
+        foreach ($liked_articles as $liked_article)
+        {
+            if ($liked_article->get_id() == $article_id)
+            {
+                $this->_record_error('you have already liked this article');
+                return null;
+            }
+        }
+        $this->generic_article_mapper->store_impression($user, $article_id, 'like');
+    }
+
+    public function dislike_article($user, $article_id)
+    {
+        $disliked_articles = $this->generic_article_mapper->get_all_articles_with_impression_by_user($user, 'dislike');
+        foreach ($disliked_articles as $disliked_article)
+        {
+            if ($disliked_article->get_id() == $article_id)
+            {
+                $this->_record_error('you have already disliked this article');
+                return null;
+            }
+        }
+        $this->generic_article_mapper->store_impression($user, $article_id, 'dislike');
+    }
+
+    public function has_current_user_liked_article($article)
+    {
+        $liked_articles = $this->generic_article_mapper->get_all_articles_with_impression_by_user($this->get_logged_in_user(), 'like');
+        foreach ($liked_articles as $liked_article)
+        {
+            if ($liked_article->get_id() == $article->get_id())
+            {
+                return true;
+            }
+        }
+        // none of the likes was on this article
+        return false;
+    }
+
+    public function has_current_user_disliked_article($article)
+    {
+        $disliked_articles = $this->generic_article_mapper->get_all_articles_with_impression_by_user($this->get_logged_in_user(), 'dislike');
+        foreach ($disliked_articles as $disliked_article)
+        {
+            if ($disliked_article->get_id() == $article->get_id())
+            {
+                return true;
+            }
+        }
+        // none of the dislikes was on this article
+        return false;
+    }
+
 }
 
 ?>

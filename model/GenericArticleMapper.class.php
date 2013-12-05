@@ -121,6 +121,7 @@ class GenericArticleMapper extends AbstractDataMapper
     {
         try
         {
+            $this->_database_connection->connect();
             $auth_stmt = 'SELECT a_id FROM highlights ORDER BY timestamp ASC';
             $auth_statement = $this->_database_connection->get_connection()->prepare($auth_stmt);
             $auth_statement->execute();
@@ -165,7 +166,10 @@ class GenericArticleMapper extends AbstractDataMapper
     
     public function find_by_id($a_id)
     {
-        return $this->get_mapper_for_id($a_id)->find_by_id($a_id);
+        $article = $this->get_mapper_for_id($a_id)->find_by_id($a_id);
+        $article->edtiors = $this->get_article_editors($article->get_id());
+        $article->highlighted = $this->is_article_highlighted($article->get_id());
+        return $article;
     }
     
     public function get_all()
@@ -187,18 +191,69 @@ class GenericArticleMapper extends AbstractDataMapper
     {
         try
         {
-            $auth_stmt = 'SELECT DISTINCT(username) FROM editor_map WHERE a_id=:article_id';
-            $auth_statement = $this->_database_connection->get_connection()->prepare($auth_stmt);
-            $auth_statement->execute(array(
-                'article_id' => $a_id
+            $this->_database_connection->connect();
+            $stmt = 'SELECT DISTINCT(username) FROM editor_map WHERE a_id=:article_id';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->execute(array(
+                ':article_id' => $a_id
             ));
             $editors = array();
             $user_mapper = new UserMapper($this->_database_connection);
-            while ($row = $auth_statement->fetch(PDO::FETCH_ASSOC))
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC))
             {
                 $editors[] = $user_mapper->find_by_id($row['username']);
             }
             return $editors;
+        } catch(PDOException $e) {
+            $this->_database_connection->close_connection();
+            echo 'ERROR: ' . $e->getMessage();
+        }
+    }
+
+    public function store_impression($user, $a_id, $impression)
+    {
+        try
+        {
+            $this->_database_connection->connect();
+            // likes/dislikes assumed to be mutually exclusive.
+            $stmt = 'DELETE FROM likes_and_dislikes WHERE a_id=:article_id AND username=:username';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->execute(array(
+                ':article_id' => $a_id,
+                ':username' => $user->username
+            ));
+
+            $stmt = 'INSERT INTO likes_and_dislikes (username, a_id, impression) VALUES (:username, :article_id, :impression)';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->execute(array(
+                ':article_id' => $a_id,
+                ':username' => $user->username,
+                ':impression' => $impression
+            ));
+        } catch(PDOException $e) {
+            $this->_database_connection->close_connection();
+            echo 'ERROR: ' . $e->getMessage();
+        }
+    }
+
+    public function get_all_articles_with_impression_by_user($user, $impression)
+    {
+        try
+        {
+            $this->_database_connection->connect();
+            // likes/dislikes assumed to be mutually exclusive.
+            $stmt = 'SELECT * FROM likes_and_dislikes WHERE username=:username AND impression=:impression';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->execute(array(
+                ':username' => $user->username,
+                ':impression' => $impression
+            ));
+            $articles = array();
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC))
+            {
+                $articles[] = $this->find_by_id($row['a_id']);
+            }
+            return $articles;
         } catch(PDOException $e) {
             $this->_database_connection->close_connection();
             echo 'ERROR: ' . $e->getMessage();
