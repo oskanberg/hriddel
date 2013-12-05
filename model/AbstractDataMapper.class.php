@@ -8,34 +8,12 @@ abstract class AbstractDataMapper
     {
         $this->_database_connection = $database_connection;
     }
-
+    
     protected function _get_authors($a_id)
     {
         try
         {
             $auth_stmt = 'SELECT username FROM authorship WHERE a_id=:article_id';
-            $auth_statement = $this->_database_connection->get_connection()->prepare($auth_stmt);
-            $auth_statement->execute(array(
-                'article_id' => $a_id
-            ));
-            $authors = array();
-            $user_mapper = new UserMapper($this->_database_connection);
-            while ($row = $auth_statement->fetch(PDO::FETCH_ASSOC))
-            {
-                $authors[] = $user_mapper->find_by_id($row['username']);
-            }
-            return $authors;
-        } catch(PDOException $e) {
-            $this->_database_connection->close_connection();
-            echo 'ERROR: ' . $e->getMessage();
-        }
-    }
-
-    protected function _find_user_by_username($username)
-    {
-        try
-        {
-            $auth_stmt = 'SELECT ^% FROM authorship WHERE a_id=:article_id';
             $auth_statement = $this->_database_connection->get_connection()->prepare($auth_stmt);
             $auth_statement->execute(array(
                 'article_id' => $a_id

@@ -12,9 +12,8 @@ if ($data['show_result_text'])
 if ($data['show_login'])
 {
 ?>
-<form action="?login&action=authenticate" method="post">
-  <input type="text" name="username" placeholder="Username" autofocus>
-  <input type="submit">
+<form action="?login&action=authenticate" method="post" class="pad" style="width:220px; margin: 0 auto;">
+    <input type="text" name="username" placeholder="Username" autofocus><input type="submit">
 </form>
 <?php
 }

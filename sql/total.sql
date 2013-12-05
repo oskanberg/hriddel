@@ -7,6 +7,8 @@ DROP TABLE IF EXISTS likes_and_dislikes;
 DROP TABLE IF EXISTS columns;
 DROP TABLE IF EXISTS articles;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS editor_map;
+DROP TABLE IF EXISTS highlights;
 
 CREATE TABLE articles (
   a_id int NOT NULL AUTO_INCREMENT,
@@ -70,5 +72,23 @@ CREATE TABLE likes_and_dislikes (
   a_id int NOT NULL,
   impression ENUM ('dislike', 'like'),
   PRIMARY KEY (username, a_id),
+  FOREIGN KEY (a_id) REFERENCES articles(a_id),
+  FOREIGN KEY (username) REFERENCES users(username)
+);
+
+CREATE TABLE editor_map (
+  edit_id int NOT NULL AUTO_INCREMENT,
+  username varchar(20) NOT NULL,
+  a_id int NOT NULL,
+  time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (edit_id),
+  FOREIGN KEY (a_id) REFERENCES articles(a_id),
+  FOREIGN KEY (username) REFERENCES users(username)
+);
+
+CREATE TABLE highlights (
+  a_id int NOT NULL,
+  time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (a_id),
   FOREIGN KEY (a_id) REFERENCES articles(a_id)
 );

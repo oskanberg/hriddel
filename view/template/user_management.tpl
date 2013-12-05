@@ -42,7 +42,7 @@
     </div>
 </div>
 <script type="text/javascript">
-    $('#item_list li').not('.guidance_message .none_found_message').click(function()
+    $('#item_list li').not('.guidance_message, .none_found_message').click(function()
     {
         // if already selected, it might be an element
         // that should otherwise be hidden

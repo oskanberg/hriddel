@@ -60,6 +60,17 @@ class ArticleManagementController extends Controller
             var_dump($_POST);
         }
     }
+
+    public function highlight_article()
+    {
+        if (isset($_POST['a_id']))
+        {
+            $this->_model->highlight_article($_POST['a_id']);
+        } else {
+            echo 'stuff not set';
+            var_dump($_POST);
+        }
+    }
 }
 
 ?>

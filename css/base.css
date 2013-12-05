@@ -74,9 +74,9 @@ p.success
     font-size: 110%;
 }
 
-#main_menu a:hover
+#main_menu li:hover
 {
-    background: #00b3eb;
+    background: rgba(70, 70, 200, 0.7);
 }
 
 #non_nav
@@ -200,6 +200,11 @@ li.editor, li.published
 {
     background: rgba(60, 25, 25, .6);
 }
+li.rejected
+{
+    background: rgba(100, 0, 0, .6);
+}
+
 #item_list li.title
 {
     background: rgba(0,0,0,0);
@@ -306,6 +311,47 @@ li.editor, li.published
     display: inline-block;
     vertical-align: top;
     text-align: center;
+}
+
+#article-area
+{
+    margin: 30px 30px 30px 30px;
+}
+
+#article
+{
+    width: 600px;
+    text-align: justify;
+    display: inline-block;
+}
+
+#article-meta
+{
+    vertical-align: top;
+    margin: 0px 30px 0px 30px;
+    padding: 10px 10px 10px 10px;
+    border: 2px solid rgba(50,50,50,0.4);
+    width: 200px;
+    display: inline-block;
+}
+
+#cover-image
+{
+    width: 890px;
+    height: 400px;
+    background-position: center;
+    background-size: cover;
+    margin-bottom: 30px;
+}
+
+#cover-image h2
+{
+    font-weight: bold;
+    font-size: 250%;
+    color: #FFFFFF;
+    background: rgba(0, 0, 0, 0.75);
+    position: absolute;
+    top: 450px;
 }
 
 .cf:before,

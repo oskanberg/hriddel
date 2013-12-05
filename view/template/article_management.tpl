@@ -5,17 +5,18 @@
         <ul>
             <li class="title">selectors</li>
             <li id="mine">show my authored</li>
+            <li id="submitted">show submitted</li>
+            <li id="under_review">show under review</li>
+            <li id="awaiting_changes">show awaiting changes</li>
+            <li id="published">show published</li>
+            <li id="highlighted">show highlighted</li>
+            <li id="rejected">show rejected</li>
             <?php
             $type = $this->_model->get_logged_in_type();
             if ($type == 'editor' || $type == 'publisher')
             {
             ?>
             <li id="my_edited">show my edited</li>
-            <li id="submitted">show submitted</li>
-            <li id="under_review">show under review</li>
-            <li id="awaiting_changes">show awaiting changes</li>
-            <li id="published">show published</li>
-            <li id="highlighted">show highlighted</li>
             <?php
             }
             ?>
@@ -34,6 +35,7 @@
             {
                 $author_string = '';
                 $num_authors = count($article->authors);
+                $my_username = $this->_model->get_logged_in_username();
                 $is_mine = false;
                 for ($i = 0; $i < $num_authors; $i++)
                 {
@@ -43,17 +45,30 @@
                     {
                         $author_string .= ', ';
                     }
-                    if ($article->authors[$i]->username == $this->_model->get_logged_in_username())
+                    if ($article->authors[$i]->username == $my_username)
                     {
                         $is_mine = true;
                     }
                 }
+                $is_edited_by_me = false;
+                foreach ($this->_model->get_article_editors($article) as $editor)
+                {
+                    if ($editor->username == $my_username)
+                    {
+                        $is_edited_by_me = true;
+                    }
+                }
                 echo '<li class="' . str_replace(' ', '_', $article->status);
                 if ($is_mine) {
-                    echo ' mine" ';
-                } else {
-                    echo '" ';
+                    echo ' mine';
                 }
+                if ($is_edited_by_me) {
+                    echo ' my_edited';
+                }
+                if ($article->highlighted) {
+                    echo ' highlighted';
+                }
+                echo '"';
                 echo 'data-a_id="' . $article->get_id() . '"';
                 echo '>';
                 echo '<span class="title">' . $article->title . '</span>';
@@ -72,10 +87,11 @@
             if ($type == 'editor' || $type == 'publisher')
             {
             ?>
-            <input type="submit" id="edit_button" onClick="edit_article()" class="form_button" value="edit / comment" style="background: rgba(25, 25, 60, .7)" />
-            <input type="submit" id="ur_button" onClick="change_status('under review')" class="form_button" value="change to 'under review'" style="background: rgba(25, 25, 60, .7)" />
-            <input type="submit" id="pb_button" onClick="change_status('published')" class="form_button" value="publish" style="background: rgba(25, 25, 60, .7)" />
-            <input type="submit" id="reject_button" onClick="change_status('rejected')" class="form_button" value="reject" style="background: rgba(25, 25, 60, .7)" />
+            <input type="submit" id="edit_button" onClick="change_status('under review', true)" class="form_button" value="review" style="background: rgba(25, 60, 25, .6);">
+            <input type="submit" id="pb_button" onClick="change_status('published', false)" class="form_button" value="publish" style="background: rgba(60, 25, 25, .6);">
+            <input type="submit" id="reject_button" onClick="change_status('rejected', false)" class="form_button" value="reject" style="background: rgba(100, 0, 0, .6);">
+            <input type="submit" id="changes_button" onClick="change_status('awaiting changes', false)" class="form_button" value="request changes" style="background: rgba(25, 25, 60, .6);">
+            <input type="submit" id="highlight_button" onClick="highlight()" class="form_button" value="highlight" style="background: rgba(60, 60, 60, .6);">
             <?php
             } else if ($type == 'writer') {
             ?>
@@ -142,8 +158,6 @@
             var hidden = true;
             for (var i = 0; i < class_list.length; i++)
             {
-                console.log(class_list[i]);
-                console.log(window.visible_elements);
                 if ($.inArray(class_list[i], window.visible_elements) > -1)
                 {
                     //console.log($(this) + ' : ' + converted);
@@ -156,6 +170,8 @@
             } else {
                 $(this).show('slow');
             }
+            $('p.error').text('');
+            $('p.success').text('');
         });
         // showhide all buttons. The disallowed
         // buttons will just not exist for restricted users
@@ -176,8 +192,21 @@
                 $('#pb_button').show();
                 $('#reject_button').show();
                 $('#edit_button').show();
-            } else if ($.inArray('awaiting_changes', class_list)) {
+                $('#changes_button').show();
+            }
+            if ($.inArray('awaiting_changes', class_list) > -1) {
                 $('#edit_button').show();
+                $('#pb_button').show();
+                $('#reject_button').show();
+            }
+            if ($.inArray('under_review', class_list) > -1) {
+                $('#edit_button').show();
+                $('#pb_button').show();
+                $('#reject_button').show();
+                $('#changes_button').show();
+            }
+            if ($.inArray('published', class_list) > -1) {
+                $('#highlight_button').show();
             }
         });
     }
@@ -191,7 +220,41 @@
         var a_id = $('#item_list li.selected').attr('data-a_id');
         parent.location = '?edit_article&a_id=' + a_id;
     }
-    function change_status(type)
+    function highlight()
+    {
+        var article_id = $('#item_list li.selected').attr('data-a_id');
+        if (article_id.length > 0)
+        {
+            var jqxhr = $.post(
+            '?manage_articles_submit&action=highlight_article',
+            {
+                'a_id': article_id,
+            },
+            function(data)
+            {
+                if (data === "")
+                {
+                    $('#item_list li.selected').addClass('highlighted');
+                    $('p.success').text('article was successfully highlighted');
+                } else {
+                    $('p.error').text(data);
+                }
+            })
+            .fail(function() {
+                // for the sake of this assessment, this should never happen
+                alert('Internal Server Error. Crap.');
+            })
+        } else {
+            $('p.error').text('please choose an article to change (click on one)');
+        }
+    }
+
+    /*
+    * param status : what to change status to 
+    * edit: bool - whether not to change page to edit page after success
+    * need the second param because $.post is asnychronous
+    */
+    function change_status(status, edit)
     {
         var article_id = $('#item_list li.selected').attr('data-a_id');
         if (article_id.length > 0)
@@ -200,28 +263,34 @@
             '?manage_articles_submit&action=change_article_status',
             {
                 'a_id': article_id,
-                'new_status' : type
+                'new_status' : status
             },
             function(data)
             {
                 if (data === "")
                 {
                     $('#item_list li.selected')
-                        .removeClass('selected submitted under_review awaiting_changes published highlighted')
-                        .addClass(type.replace(' ', '_'))
-                        .find('.status').text(type);
-                    $('p.success').text('changes successfully saved.');
+                        .removeClass('submitted under_review awaiting_changes published highlighted rejected')
+                        .addClass(status.replace(' ', '_'))
+                        .find('.status').text(status);
+                    $('p.success').text('article status successfully changed');
                 } else {
                     $('p.error').text(data);
                 }
-            }
-            )
+            })
             .fail(function() {
                 // for the sake of this assessment, this should never happen
                 alert('Internal Server Error. Crap.');
+            })
+            .done(function () {
+                if (edit)
+                {
+                    var a_id = $('#item_list li.selected').attr('data-a_id');
+                    parent.location = '?edit_article&a_id=' + a_id;
+                }
             });
         } else {
-            $('p.error').text('please choose one or more users to change (click on them)');
+            $('p.error').text('please choose an article to change (click on one)');
         }
     }
 </script>

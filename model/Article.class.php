@@ -9,6 +9,8 @@ class Article extends AbstractObject
     public $type;
     public $status;
     public $cover_image;
+    public $editors;
+    public $highlighted = false;
 }
 
 ?>

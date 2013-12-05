@@ -86,6 +86,20 @@ abstract class Model
             }
         }
     }
+
+    public function can_current_user_manage_users()
+    {
+        if ($this->is_user_logged_in())
+        {
+            $user = $this->_user_mapper->find_by_id($_SESSION['username']);
+            if ($user->type == 'editor' || $user->type == 'publisher')
+            {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 }
 
 ?>

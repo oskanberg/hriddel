@@ -13,6 +13,10 @@ if ($data['show_form'])
 {
 ?>
 <div id="management">
+    <div style="width:100%">
+        <a href='?manage_articles'>&lt;--back to article management</a>
+        <hr>
+    </div>
     <div style="width:570px; display:inline-block; verticle-align:top">
         <form action="?submit&action=ammend_article&a_id=<?php echo $_GET['a_id']; ?>" method="post">
             <div id="accordion" style="display:none;">
@@ -52,7 +56,7 @@ if ($data['show_form'])
                     <select name="review_score" id="review_score">
                         <option value="">Select review score...</option>
                         <?php
-                        for ($i = 0; $i <= 10; $i++)
+                        for ($i = 1; $i <= 5; $i++)
                         {
                             echo '<option value="' . $i . '"';
                             if ($data['article']->review_score == $i)

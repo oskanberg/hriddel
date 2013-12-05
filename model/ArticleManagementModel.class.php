@@ -142,9 +142,9 @@ class ArticleManagementModel extends Model
 
     public function update_article_status($a_id, $new_status)
     {
-        $article = $this->generic_article_mapper->create_new();
+        $article = $this->generic_article_mapper->find_by_id($a_id);
         $article->status = $new_status;
-        $successful_mapper->update($article);
+        $this->generic_article_mapper->update($article);
     }
 
     public function get_all_possible_authors()
@@ -182,9 +182,10 @@ class ArticleManagementModel extends Model
         $this->comment_mapper->save($comment);
     }
 
-    public function update_article($title, $content, $additional_authors, $cover_image, $a_id, $review_score, $column_name)
+    public function update_article($title, $content, $additional_authors, $cover_image, $article_id, $review_score, $column_name)
     {
-        $article = $this->generic_article_mapper->find_by_id($a_id);
+        $this->submit_attempted = true;
+        $article = $this->generic_article_mapper->find_by_id($article_id);
         $article->title = $title;
         $article->content = $content;
         $article->additional_authors = $additional_authors;
@@ -196,6 +197,18 @@ class ArticleManagementModel extends Model
             $article->column_name = $column_name;
         }
         $this->generic_article_mapper->update($article);
+        $this->generic_article_mapper->add_editor($article->get_id(), $this->get_logged_in_user());
+    }
+
+    public function get_article_editors($article)
+    {
+        return $this->generic_article_mapper->get_article_editors($article->get_id());
+    }
+
+    public function highlight_article($article_id)
+    {
+        $article = $this->generic_article_mapper->find_by_id($article_id);
+        $this->generic_article_mapper->highlight($article);
     }
 }
 

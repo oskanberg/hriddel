@@ -35,20 +35,33 @@
                             <a href="/">home</a>
                         </li>
                         <li>
-                            <a href="/articles">articles</a>
+                            <a href="/?articles">articles</a>
                         </li>
                         <li>
-                            <a href="/reviews">reviews</a>
+                            <a href="/?reviews">reviews</a>
                         </li>
                         <li>
-                            <a href="/columns">columns</a>
+                            <a href="/?columns">columns</a>
                         </li>
                         <?php
                         if ($this->_model->can_current_user_submit_articles())
                         {
                         ?>
-                        <li style="background: #881111;">
+                        <li>
+                            <a href="#"></a>
+                        </li>
+                        <li style="background: rgba(100,200,100,0.5);">
                             <a href="/?submit">submit article</a>
+                        </li>
+                        <li style="background: rgba(100,200,100,0.5);">
+                            <a href="/?manage_articles">manage articles</a>
+                        </li>
+                        <?php
+                        }
+                        if ($this->_model->can_current_user_manage_users()) {
+                        ?>
+                        <li style="background: rgba(100,200,100,0.5);">
+                            <a href="/?manage_users">manage users</a>
                         </li>
                         <?php
                         }
