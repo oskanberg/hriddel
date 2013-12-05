@@ -14,7 +14,10 @@ class ColumnArticleMapper extends AbstractDataMapper
             $new_column_article->status = $data['status'];
             $new_column_article->cover_image = $data['cover_image'];
             $new_column_article->column_name = $data['column_name'];
-            $new_column_article->date = $data['publish_date'];
+            if (isset($data['publish_date']))
+            {
+                $new_article->date = $data['publish_date'];
+            }
             return $new_column_article;
         } else {
             throw new Exception('Need data.');
@@ -50,7 +53,7 @@ class ColumnArticleMapper extends AbstractDataMapper
             $stmt = 'UPDATE column_mappings SET c_name=:c_name WHERE a_id=:a_id';
             $statement = $this->_database_connection->get_connection()->prepare($stmt);
             $statement->execute(array(
-                ':score' => $obj->column_name,
+                ':c_name' => $obj->column_name,
                 ':a_id' => $obj->get_id()
             ));
             $this->_database_connection->close_connection();
@@ -62,13 +65,36 @@ class ColumnArticleMapper extends AbstractDataMapper
     
     public function find_by_id($id)
     {
-
+        $this->_database_connection->connect();
+        try
+        {
+            $stmt = 'SELECT * FROM articles WHERE a_id=:a_id';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->execute(array(
+                ':a_id' => $id
+            ));
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+            if ($result)
+            {
+                $result['column_name'] = $this->get_column_name($id);
+                $result['authors'] = $this->_get_authors($id);
+                $new_column_article = $this->create_new($result);
+                $new_column_article->set_id($id);
+                return $new_column_article;
+            } else {
+                echo 'No review with that id (' . $id . ') found.';
+            }
+        } catch(PDOException $e) {
+            $this->_database_connection->close_connection();
+            echo 'ERROR: ' . $e->getMessage();
+        }
     }
 
     private function get_column_name($a_id)
     {
         $this->_database_connection->connect();
         $stmt = 'SELECT c_name FROM column_mappings WHERE a_id=:article_id';
+        $statement = $this->_database_connection->get_connection()->prepare($stmt);
         $statement->execute(array(
             'article_id' => $a_id
         ));
@@ -95,6 +121,27 @@ class ColumnArticleMapper extends AbstractDataMapper
         }
         $this->_database_connection->close_connection();
         return $column_articles; 
+    }
+
+    public function get_recent($limit)
+    {
+        try
+        {
+            $this->_database_connection->connect();
+            $stmt = 'SELECT a_id FROM articles WHERE status="published" AND type="column article" ORDER BY publish_date DESC LIMIT :lim';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->bindParam(':lim', $limit, PDO::PARAM_INT);
+            $statement->execute();
+            $articles = array();
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC))
+            {
+                $articles[] = $this->find_by_id($row['a_id']);
+            }
+            return $articles;
+        } catch(PDOException $e) {
+            $this->_database_connection->close_connection();
+            echo 'ERROR: ' . $e->getMessage();
+        }
     }
 
     protected function _save_to_database(AbstractObject $obj)

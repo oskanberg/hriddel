@@ -26,7 +26,7 @@ class EditArticleView extends View
             $data['show_column_name'] = true;
         }
         $data['comments'] = $this->_model->get_article_comments($_GET['a_id']);
-        $data['additional_author_possibilities'] = array();
+        $data['author_possibilities'] = array();
         $current_article_author_usernames = array();
         foreach ($data['article']->authors as $author)
         {
@@ -36,7 +36,7 @@ class EditArticleView extends View
         {
             if (!in_array($author->username, $current_article_author_usernames))
             {
-                $data['additional_author_possibilities'][] = $author;
+                $data['author_possibilities'][] = $author;
             }
         }
         if ($this->_model->has_submit_been_attempted())

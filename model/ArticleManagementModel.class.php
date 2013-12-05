@@ -182,13 +182,12 @@ class ArticleManagementModel extends Model
         $this->comment_mapper->save($comment);
     }
 
-    public function update_article($title, $content, $additional_authors, $cover_image, $article_id, $review_score, $column_name)
+    public function update_article($title, $content, $authors, $cover_image, $article_id, $review_score, $column_name)
     {
         $this->submit_attempted = true;
         $article = $this->generic_article_mapper->find_by_id($article_id);
         $article->title = $title;
         $article->content = $content;
-        $article->additional_authors = $additional_authors;
         $article->cover_image = $cover_image;
         if (!is_null($review_score))
         {
@@ -198,6 +197,23 @@ class ArticleManagementModel extends Model
         }
         $this->generic_article_mapper->update($article);
         $this->generic_article_mapper->add_editor($article->get_id(), $this->get_logged_in_user());
+
+        $previous_authors = $article->authors;
+        foreach ($authors as $author)
+        {
+            $new = true;
+            foreach ($previous_authors as $previous_author)
+            {
+                if ($previous_author->get_id() == $author)
+                {
+                    $new = false;
+                }
+            }
+            if ($new)
+            {
+                $this->generic_article_mapper->add_author($author, $article->get_id());
+            }
+        }
     }
 
     public function get_article_editors($article)
@@ -211,6 +227,11 @@ class ArticleManagementModel extends Model
         $this->generic_article_mapper->highlight($article);
     }
 
+    public function get_highlighted_articles($limit)
+    {
+        return $this->generic_article_mapper->get_recent_highlighted_articles($limit);
+    }
+    
     public function can_user_like_dislike()
     {
         if ($this->is_user_logged_in())
@@ -277,6 +298,28 @@ class ArticleManagementModel extends Model
         return false;
     }
 
+    public function get_most_liked($limit)
+    {
+        return $this->generic_article_mapper->get_most_liked($limit);
+    }
+
+    public function get_recent_articles($limit)
+    {
+        $article_mapper = new ArticleMapper($this->_database_connection);
+        return $article_mapper->get_recent($limit);
+    }
+
+    public function get_recent_reviews($limit)
+    {
+        $review_mapper = new ReviewMapper($this->_database_connection);
+        return $review_mapper->get_recent($limit);
+    }
+
+    public function get_recent_column_articles($limit)
+    {
+        $column_article_mapper = new ColumnArticleMapper($this->_database_connection);
+        return $column_article_mapper->get_recent($limit);
+    }
 }
 
 ?>

@@ -13,7 +13,10 @@ class ArticleMapper extends AbstractDataMapper
             $new_article->type = $data['type'];
             $new_article->status = $data['status'];
             $new_article->cover_image = $data['cover_image'];
-            $new_article->date = $data['publish_date'];
+            if (isset($data['publish_date']))
+            {
+                $new_article->date = $data['publish_date'];
+            }
             return $new_article;
         } else {
             throw new Exception('Need data.');
@@ -100,6 +103,27 @@ class ArticleMapper extends AbstractDataMapper
         }
     }
     
+    public function get_recent($limit)
+    {
+        try
+        {
+            $this->_database_connection->connect();
+            $stmt = 'SELECT a_id FROM articles WHERE status="published" AND type="article" ORDER BY publish_date DESC LIMIT :lim';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->bindParam(':lim', $limit, PDO::PARAM_INT);
+            $statement->execute();
+            $articles = array();
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC))
+            {
+                $articles[] = $this->find_by_id($row['a_id']);
+            }
+            return $articles;
+        } catch(PDOException $e) {
+            $this->_database_connection->close_connection();
+            echo 'ERROR: ' . $e->getMessage();
+        }
+    }
+
     protected function _save_to_database(AbstractObject $obj)
     {
         $this->_database_connection->connect();

@@ -6,8 +6,8 @@ include ROOTPATH . '/control/bootstrap.php';
 
 $map = array(
     'home' => array(
-        'model' => 'HomeModel',
-        'controller' => 'IndexController',
+        'model' => 'ArticleManagementModel',
+        'controller' => 'ArticleManagementController',
         'view' => 'IndexView'
     ),
     'login' => array(
@@ -45,6 +45,21 @@ $map = array(
         'controller' => 'ArticleManagementController',
         'view' => 'ViewArticleView'
     ),
+    'articles' => array(
+        'model' => 'ArticleManagementModel',
+        'controller' => 'ArticleManagementController',
+        'view' => 'ArticlesView'
+    ),
+    'reviews' => array(
+        'model' => 'ArticleManagementModel',
+        'controller' => 'ArticleManagementController',
+        'view' => 'ReviewsView'
+    ),
+    'columns' => array(
+        'model' => 'ArticleManagementModel',
+        'controller' => 'ArticleManagementController',
+        'view' => 'ColumnsView'
+    ),
     // special cases: blank view for jQuery.post() result
     'manage_users_submit' => array(
         'model' => 'UserManagementModel',
@@ -69,8 +84,8 @@ $controller = null;
 
 if (empty($_GET))
 {
-    $model = new IndexModel();
-    $controller = new IndexController($model);
+    $model = new ArticleManagementModel();
+    $controller = new ArticleManagementController($model);
     $view = new IndexView($controller, $model);
 } else {
     $keys = array_keys($_GET);

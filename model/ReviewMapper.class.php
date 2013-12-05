@@ -14,7 +14,10 @@ class ReviewMapper extends AbstractDataMapper
             $new_review->status = $data['status'];
             $new_review->cover_image = $data['cover_image'];
             $new_review->review_score = $data['review_score'];
-            $new_review->date = $data['publish_date'];
+            if (isset($data['publish_date']))
+            {
+                $new_article->date = $data['publish_date'];
+            }
             return $new_review;
         } else {
             throw new Exception('Need data.');
@@ -118,6 +121,27 @@ class ReviewMapper extends AbstractDataMapper
             }
             $this->_database_connection->close_connection();
             return $reviews;
+        } catch(PDOException $e) {
+            $this->_database_connection->close_connection();
+            echo 'ERROR: ' . $e->getMessage();
+        }
+    }
+    
+    public function get_recent($limit)
+    {
+        try
+        {
+            $this->_database_connection->connect();
+            $stmt = 'SELECT a_id FROM articles WHERE status="published" AND type="review" ORDER BY publish_date DESC LIMIT :lim';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->bindParam(':lim', $limit, PDO::PARAM_INT);
+            $statement->execute();
+            $articles = array();
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC))
+            {
+                $articles[] = $this->find_by_id($row['a_id']);
+            }
+            return $articles;
         } catch(PDOException $e) {
             $this->_database_connection->close_connection();
             echo 'ERROR: ' . $e->getMessage();

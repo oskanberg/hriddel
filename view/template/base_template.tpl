@@ -1,4 +1,3 @@
-<!-- begin base_template.tpl -->
 <!DOCTYPE html>
 <html>
     <head>
@@ -70,15 +69,14 @@
                 </div>
             </nav>
             <div id="non_nav" class="cf">
-                <section class="content_box restrict_and_center pad">
-                    <?php
-                    include_once(TEMPLATE_PATH . $data['view_specific_template']);
-                    ?>
-                </section>
+                <?php
+                include_once(TEMPLATE_PATH . $data['view_specific_template']);
+                ?>
             </div>
+            <div class="spacer"></div>
             <footer id="global_footer">
             </footer>
         </section>
+        <div class="spacer"></div>
     </body>
 </html>
-<!-- begin base_template.tpl -->

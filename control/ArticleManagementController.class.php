@@ -7,7 +7,7 @@ class ArticleManagementController extends Controller
         if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['type']) && isset($_POST['additional_authors']) && isset($_POST['cover_image']))
         {
             $additional_authors = array_filter(explode(';', $_POST['additional_authors']));
-            if ($_POST['type'] == 'column_article')
+            if ($_POST['type'] == 'column article')
             {
                 if (!isset($_POST['column_name']))
                 {
@@ -31,11 +31,15 @@ class ArticleManagementController extends Controller
     
     public function ammend_article()
     {
-        if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['additional_authors']) && isset($_POST['cover_image']))
+        if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['authors']) && isset($_POST['cover_image']))
         {
             $review_score = isset($_POST['review_score']) ? $_POST['review_score'] : null;
             $column_name = isset($_POST['column_name']) ? $_POST['column_name'] : null;
-            $this->_model->update_article($_POST['title'], $_POST['content'], $_POST['additional_authors'], $_POST['cover_image'], $_GET['a_id'], $review_score, $column_name);
+            $authors = array_filter(explode(';', $_POST['authors']));
+            $this->_model->update_article($_POST['title'], $_POST['content'], $authors, $_POST['cover_image'], $_GET['a_id'], $review_score, $column_name);
+        } else {
+            echo 'stuff not set';
+            var_dump($_POST);
         }
     }
 

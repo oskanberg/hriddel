@@ -31,7 +31,7 @@ class GenericArticleMapper extends AbstractDataMapper
         }
         $article->editors = $this->get_article_editors($article->get_id());
         $article->highlighted = $this->is_article_highlighted($article->get_id());
-        return article;
+        return $article;
     }
 
     private function get_mapper_for_object($obj)
@@ -108,7 +108,7 @@ class GenericArticleMapper extends AbstractDataMapper
             $stmt = 'INSERT INTO highlights (a_id) VALUES (:a_id)';
             $statement = $this->_database_connection->get_connection()->prepare($stmt);
             $statement->execute(array(
-                ':a_id' => $obj->get_id(a_id),
+                ':a_id' => $obj->get_id(),
             ));
             $this->_database_connection->close_connection();
         } catch(PDOException $e) {
@@ -122,12 +122,12 @@ class GenericArticleMapper extends AbstractDataMapper
         try
         {
             $this->_database_connection->connect();
-            $auth_stmt = 'SELECT a_id FROM highlights ORDER BY timestamp ASC';
-            $auth_statement = $this->_database_connection->get_connection()->prepare($auth_stmt);
-            $auth_statement->execute();
+            $stmt = 'SELECT a_id FROM highlights ORDER BY time DESC LIMIT :lim';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->bindParam(':lim', $limit, PDO::PARAM_INT);
+            $statement->execute();
             $articles = array();
-            $i = 0;
-            while ($row = $auth_statement->fetch(PDO::FETCH_ASSOC) && $i < $limit)
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC))
             {
                 $articles[] = $this->get_mapper_for_id($row['a_id'])->find_by_id($row['a_id']);
             }
@@ -148,7 +148,8 @@ class GenericArticleMapper extends AbstractDataMapper
                 ':a_id' => $a_id
             ));
             $result = $statement->fetch(PDO::FETCH_ASSOC);
-            if ($result > 0) {
+            if ($result['count(*)'] > 0)
+            {
                 return true;
             } else {
                 return false;
@@ -257,6 +258,46 @@ class GenericArticleMapper extends AbstractDataMapper
         } catch(PDOException $e) {
             $this->_database_connection->close_connection();
             echo 'ERROR: ' . $e->getMessage();
+        }
+    }
+
+    public function get_most_liked($lim)
+    {
+        try
+        {
+            $this->_database_connection->connect();
+            $stmt = 'SELECT a_id, COUNT(*) as c FROM likes_and_dislikes GROUP BY a_id ORDER BY c DESC';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->bindParam(':lim', $limit, PDO::PARAM_INT);
+            $statement->execute();
+            $articles = array();
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC))
+            {
+                $articles[] = $this->get_mapper_for_id($row['a_id'])->find_by_id($row['a_id']);
+            }
+            return $articles;
+        } catch(PDOException $e) {
+            $this->_database_connection->close_connection();
+            echo 'ERROR: ' . $e->getMessage();
+        }
+    }
+
+    public function add_author($username, $article_id)
+    {
+        try
+        {
+            $this->_database_connection->connect();
+            $this_article_id = $this->_database_connection->get_connection()->lastInsertID();
+            $stmt = 'INSERT INTO authorship (username, a_id) VALUES (:username, :article_id)';
+            $statement = $this->_database_connection->get_connection()->prepare($stmt);
+            $statement->execute(array(
+                ':username' => $username,
+                ':article_id' => $article_id
+            ));
+            $this->_database_connection->close_connection();
+        } catch(PDOException $e) {
+                $this->_database_connection->close_connection();
+                echo 'ERROR: ' . $e->getMessage();
         }
     }
 }

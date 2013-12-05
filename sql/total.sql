@@ -15,9 +15,9 @@ CREATE TABLE articles (
   content text(30000) NOT NULL,
   status enum ('submitted', 'under review', 'awaiting changes', 'published', 'rejected') NOT NULL,
   title varchar(250) NOT NULL,
-  publish_date date NOT NULL,
+  publish_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   type enum ('article', 'column article', 'review') NOT NULL,
-  cover_image varchar(100),
+  cover_image varchar(1000),
   PRIMARY KEY (a_id)
 );
 
