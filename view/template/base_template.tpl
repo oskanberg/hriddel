@@ -5,7 +5,7 @@
         <script type="text/javascript" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
         <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
         <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
-        <link rel="stylesheet" type="text/css" href="/css/base.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo HTTP_ROOTPATH; ?>/css/base.css" />
         <title><?php echo $data['title']; ?></title>
     </head>
     <body>
@@ -16,12 +16,12 @@
                         <?php if ($this->_model->is_user_logged_in())
                         {
                             echo '<p>Logged in as ' . $this->_model->get_logged_in_username() . '</p>';
-                            echo '<a href="/?login&action=logout">Logout</a>';
+                            echo '<a href="<?php echo HTTP_ROOTPATH; ?>/?login&action=logout">Logout</a>';
                         } else {
                         ?>
                         <ul>
-                            <li><a href="?login">Login</a></li>
-                            <li><a href="?register">Register</a></li>
+                            <li><a href="<?php echo HTTP_ROOTPATH; ?>/?login">Login</a></li>
+                            <li><a href="<?php echo HTTP_ROOTPATH; ?>/?register">Register</a></li>
                         </ul>
                         <?php } ?>
                     </section>
@@ -34,13 +34,13 @@
                             <a href="/">home</a>
                         </li>
                         <li>
-                            <a href="/?articles">articles</a>
+                            <a href="<?php echo HTTP_ROOTPATH; ?>/?articles">articles</a>
                         </li>
                         <li>
-                            <a href="/?reviews">reviews</a>
+                            <a href="<?php echo HTTP_ROOTPATH; ?>/?reviews">reviews</a>
                         </li>
                         <li>
-                            <a href="/?columns">columns</a>
+                            <a href="<?php echo HTTP_ROOTPATH; ?>/?columns">columns</a>
                         </li>
                         <?php
                         if ($this->_model->can_current_user_submit_articles())
@@ -50,17 +50,17 @@
                             <a href="#"></a>
                         </li>
                         <li style="background: rgba(100,200,100,0.5);">
-                            <a href="/?submit">submit article</a>
+                            <a href="<?php echo HTTP_ROOTPATH; ?>/?submit">submit article</a>
                         </li>
                         <li style="background: rgba(100,200,100,0.5);">
-                            <a href="/?manage_articles">manage articles</a>
+                            <a href="<?php echo HTTP_ROOTPATH; ?>/?manage_articles">manage articles</a>
                         </li>
                         <?php
                         }
                         if ($this->_model->can_current_user_manage_users()) {
                         ?>
                         <li style="background: rgba(100,200,100,0.5);">
-                            <a href="/?manage_users">manage users</a>
+                            <a href="<?php echo HTTP_ROOTPATH; ?>/?manage_users">manage users</a>
                         </li>
                         <?php
                         }

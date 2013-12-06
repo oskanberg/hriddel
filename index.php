@@ -1,7 +1,8 @@
 <?php
 session_save_path('/n/www/student/Y6386774/iapt/001/tmp/');
 session_start();
-define('ROOTPATH', __DIR__);
+define('ROOTPATH', '/n/www/student/Y6386774/iapt/001/');
+define('HTTP_ROOTPATH', 'www-student.cs.york.ac.uk/~Y6386774/iapt/001/');
 define('TEMPLATE_PATH', ROOTPATH . '/view/template/');
 include ROOTPATH . '/control/bootstrap.php';
 
