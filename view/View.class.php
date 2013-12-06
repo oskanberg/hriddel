@@ -9,7 +9,6 @@ abstract class View
     {
         $this->_controller = $controller;
         $this->_model = $model;
-        session_start();
     }
 
     abstract public function display();
