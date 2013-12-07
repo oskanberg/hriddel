@@ -1,7 +1,14 @@
 <?php
 
+/**
+* A controller for everything concerning user management
+*/
 class UserManagementController extends Controller
 {
+    /**
+     * Authenticate the username. Gets parameters from $_POST
+     * returns nothing
+     */
     public function authenticate()
     {
         if (isset($_POST['username']))
@@ -10,12 +17,20 @@ class UserManagementController extends Controller
         }
     }
 
+    /**
+     * end the session for the current user
+     * returns nothing
+     */
     public function logout()
     {
         session_destroy();
         unset($_SESSION['username']);
     }
 
+    /**
+     * Register a new user. Gets parameters from $_POST
+     * returns nothing
+     */
     public function register_user()
     {
         if (isset($_POST['username']) && isset($_POST['name']))
@@ -24,6 +39,10 @@ class UserManagementController extends Controller
         }
     }
     
+    /**
+     * Change the type of multiple users. Gets parameters from $_POST
+     * returns nothing
+     */
     public function change_type_multiple()
     {
         if (isset($_POST['users']) && isset($_POST['type']))

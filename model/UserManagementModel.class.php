@@ -3,6 +3,10 @@
 class UserManagementModel extends Model
 {
 
+    /**
+    * try to log in with username, register error otherwise
+    * @param string username
+    */
     public function authenticate_username($username)
     {
         $user = $this->_user_mapper->find_by_id($username);
@@ -14,6 +18,11 @@ class UserManagementModel extends Model
         }
     }
 
+    /**
+    * register a user
+    * @param string username of the new guy
+    * @param string full name of the new guy
+    */
     public function register_user($username, $name)
     {
         // before we do anything, check for uniqueness
@@ -36,11 +45,20 @@ class UserManagementModel extends Model
         }
     }
 
+    /**
+    * get an array of all users
+    * @return array(User) all users
+    */
     public function get_users_array()
     {
         return $this->_user_mapper->get_all();
     }
 
+    /**
+    * change the type of multiple users at once
+    * @param array(User) the the users to change
+    * @param string type to change them to
+    */
     public function change_type_multiple(array $users, $type)
     {
         foreach ($users as $username)

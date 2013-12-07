@@ -45,6 +45,12 @@ p.success
     height: 90px;
 }
 
+#global_footer
+{
+    text-align: center;
+    color: #000000;
+}
+
 #user_menu
 {
     float: right;

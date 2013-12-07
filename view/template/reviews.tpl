@@ -5,7 +5,7 @@
     <?php 
     foreach ($data['reviews'] as $review)
     {
-        echo '<a href="/?view_article&a_id=' . $review->get_id() . '">';
+        echo '<a href="' . HTTP_ROOTPATH . '/?view_article&a_id=' . $review->get_id() . '">';
         echo '<div class="fiveply-content-box"';
         echo 'style="background-image:url(' . $review->cover_image . ')">';
         echo '<p>' . $review->title . '</p>';

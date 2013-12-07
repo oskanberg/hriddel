@@ -14,7 +14,7 @@
     {
     ?>
     <form action="?login&action=authenticate" method="post" class="pad" style="width:220px; margin: 0 auto;">
-        <input type="text" name="username" placeholder="Username" autofocus><input type="submit">
+        <input type="text" name="username" placeholder="Username" autofocus required><input type="submit">
     </form>
     <?php
     }

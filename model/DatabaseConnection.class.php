@@ -1,5 +1,8 @@
 <?php 
 
+/**
+* a class to encapsulate the ability to speak to the database
+*/
 class DatabaseConnection
 {
     private $host;
@@ -8,6 +11,13 @@ class DatabaseConnection
     private $password;
     private $pdo_connection = null;
 
+   /**
+    * construct with database host, database name, username, password
+    * @param string $host
+    * @param string $database_name
+    * @param string $username
+    * @param string $password
+    */
     public function __construct($host, $database_name, $username, $password)
     {
         $this->host = $host;
@@ -16,6 +26,10 @@ class DatabaseConnection
         $this->password = $password;
     }
 
+   /**
+    * connect to the database
+    * @return boolean whether connect succeeded
+    */
     public function connect()
     {
         if (!is_null($this->pdo_connection))
@@ -35,6 +49,10 @@ class DatabaseConnection
         return true;
     }
 
+   /**
+    * get the active connection (make one if there isn't one already)
+    * @return PDO the active connection 
+    */
     public function get_connection()
     {
         if(!is_null($this->pdo_connection))
@@ -52,6 +70,9 @@ class DatabaseConnection
         }
     }
 
+   /**
+    * destroy the current connection to the database
+    */
     public function close_connection()
     {
         $this->pdo_connection = null;

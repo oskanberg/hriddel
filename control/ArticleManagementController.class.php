@@ -1,7 +1,16 @@
 <?php
 
+/**
+* A controller for everything concerning articles
+*/
+
 class ArticleManagementController extends Controller
 {
+
+    /**
+     * Submit an article. Gets parameters from $_POST
+     * returns nothing
+     */
     public function submit_article()
     {
         if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['type']) && isset($_POST['additional_authors']) && isset($_POST['cover_image']))
@@ -29,6 +38,10 @@ class ArticleManagementController extends Controller
         }
     }
     
+    /**
+     * Update attributes in a content piece. Cannot change type. Gets parameters from $_POST
+     * returns nothing
+     */
     public function ammend_article()
     {
         if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['authors']) && isset($_POST['cover_image']))
@@ -43,6 +56,10 @@ class ArticleManagementController extends Controller
         }
     }
 
+    /**
+     * Change the status on an article. Gets parameters from $_POST
+     * returns nothing
+     */
     public function change_article_status()
     {
         if (isset($_POST['a_id']) && isset($_POST['new_status']))
@@ -54,6 +71,10 @@ class ArticleManagementController extends Controller
         }
     }
 
+    /**
+     * Add a comment from the current user to a given article. Gets parameters from $_POST
+     * returns nothing
+     */
     public function add_comment()
     {
         if (isset($_POST['a_id']) && isset($_POST['comment']))
@@ -65,6 +86,10 @@ class ArticleManagementController extends Controller
         }
     }
 
+    /**
+     * Highlight an article. Gets parameters from $_POST
+     * returns nothing
+     */
     public function highlight_article()
     {
         if (isset($_POST['a_id']))
@@ -76,6 +101,10 @@ class ArticleManagementController extends Controller
         }
     }
 
+    /**
+     * Dislike an article as the current user. Gets parameters from $_POST
+     * returns nothing
+     */
     public function dislike_article()
     {
         if (isset($_POST['a_id']))
@@ -83,7 +112,11 @@ class ArticleManagementController extends Controller
             $this->_model->dislike_article($this->_model->get_logged_in_user(), $_POST['a_id']);
         }
     }
-
+    
+    /**
+     * Like an article as the current user. Gets parameters from $_POST
+     * returns nothing
+     */
     public function like_article()
     {
         if (isset($_POST['a_id']))

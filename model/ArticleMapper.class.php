@@ -2,6 +2,12 @@
 
 class ArticleMapper extends AbstractDataMapper
 {
+
+    /**
+    * Create a new article given some data
+    * @param Array() $data an array of all the required data to make a new article
+    * @return Article $new_article the newly created article object
+    */
     public function create_new(array $data)
     {
         if(!is_null($data))
@@ -23,6 +29,10 @@ class ArticleMapper extends AbstractDataMapper
         }
     }
 
+    /**
+    * save a given article to the database
+    * @param Article $obj an Article object to save
+    */
     public function save(AbstractObject $obj)
     {
         $obj->set_id($this->_save_to_database($obj));
@@ -33,8 +43,10 @@ class ArticleMapper extends AbstractDataMapper
 
     }
 
-    /*
-    * assume we won't change any article type-specific attributes
+   /**
+    * update a given article object's corresponding database 
+    * assume we will never want to change an article's type
+    * @param Article $obj an Article object to update
     */
     public function update(AbstractObject $obj)
     {
@@ -57,6 +69,11 @@ class ArticleMapper extends AbstractDataMapper
         }
     }
     
+    /**
+    * find an article by its id.
+    * @param integer $a_id the id of the article
+    * @return Article $article the article object
+    */
     public function find_by_id($a_id)
     {
         $this->_database_connection->connect();
@@ -79,6 +96,10 @@ class ArticleMapper extends AbstractDataMapper
         }
     }
     
+    /**
+    * get every single article
+    * @return array(Article) $articles the array of all articles
+    */
     public function get_all()
     {
         try
@@ -103,6 +124,11 @@ class ArticleMapper extends AbstractDataMapper
         }
     }
     
+    /**
+    * get a max-limited array of most recent articles
+    * @param int the limit 
+    * @return array(Article) $articles the array of recent articles
+    */
     public function get_recent($limit)
     {
         try
@@ -124,6 +150,11 @@ class ArticleMapper extends AbstractDataMapper
         }
     }
 
+    /**
+    * save a new object to the database.
+    * @access protected
+    * @param Article $obj the article to save to the database 
+    */
     protected function _save_to_database(AbstractObject $obj)
     {
         $this->_database_connection->connect();

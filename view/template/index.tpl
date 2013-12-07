@@ -5,7 +5,7 @@
     <?php 
     foreach ($data['highlighted'] as $article)
     {
-        echo '<a href="/?view_article&a_id=' . $article->get_id() . '">';
+        echo '<a href="' . HTTP_ROOTPATH . '/?view_article&a_id=' . $article->get_id() . '">';
         echo '<div class="fiveply-content-box"';
         echo 'style="background-image:url(' . $article->cover_image . ')">';
         echo '<p>' . $article->title . '</p>';
@@ -20,7 +20,7 @@
     <?php
     foreach ($data['liked'] as $article)
     {
-        echo '<a href="/?view_article&a_id=' . $article->get_id() . '">';
+        echo '<a href="' . HTTP_ROOTPATH . '/?view_article&a_id=' . $article->get_id() . '">';
         echo '<div class="fiveply-content-box"';
         echo 'style="background-image:url(' . $article->cover_image . ')">';
         echo '<p>' . $article->title . '</p>';
@@ -39,7 +39,7 @@
             foreach ($data['recent_reviews'] as $article)
             {
                 echo '<li>';
-                echo '<a href="/?view_article&a_id=' . $article->get_id() . '">' ;
+                echo '<a href="' . HTTP_ROOTPATH . '/?view_article&a_id=' . $article->get_id() . '">' ;
                 echo $article->title . '</a></li>';
             }
         ?>
@@ -52,7 +52,7 @@
             foreach ($data['recent_articles'] as $article)
             {
                 echo '<li>';
-                echo '<a href="/?view_article&a_id=' . $article->get_id() . '">' ;
+                echo '<a href="' . HTTP_ROOTPATH . '/?view_article&a_id=' . $article->get_id() . '">' ;
                 echo $article->title . '</a></li>';
             }
         ?>
@@ -65,7 +65,7 @@
             foreach ($data['recent_column_articles'] as $article)
             {
                 echo '<li>';
-                echo '<a href="/?view_article&a_id=' . $article->get_id() . '">' ;
+                echo '<a href="' . HTTP_ROOTPATH . '/?view_article&a_id=' . $article->get_id() . '">' ;
                 echo $article->title . '</a></li>';
             }
         ?>

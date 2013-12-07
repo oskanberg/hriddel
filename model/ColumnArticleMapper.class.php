@@ -2,6 +2,11 @@
 
 class ColumnArticleMapper extends AbstractDataMapper
 {
+   /**
+    * Create a new column article given some data
+    * @param Array() $data an array of all the required data to make a new column article
+    * @return ColumnArticle $new_column_article the newly created column article object
+    */
     public function create_new(array $data)
     {
         if(!is_null($data))
@@ -16,7 +21,7 @@ class ColumnArticleMapper extends AbstractDataMapper
             $new_column_article->column_name = $data['column_name'];
             if (isset($data['publish_date']))
             {
-                $new_article->date = $data['publish_date'];
+                $new_column_article->date = $data['publish_date'];
             }
             return $new_column_article;
         } else {
@@ -24,6 +29,10 @@ class ColumnArticleMapper extends AbstractDataMapper
         }
     }
 
+    /**
+    * save a given column article to the database
+    * @param ColumnArticle $obj an ColumnArticle object to save
+    */
     public function save(AbstractObject $obj)
     {
         $obj->set_id($this->_save_to_database($obj));
@@ -35,6 +44,11 @@ class ColumnArticleMapper extends AbstractDataMapper
 
     }
 
+   /**
+    * update a given column article object's corresponding database entry
+    * assume we will never want to change an article's type
+    * @param ColumnArticle $obj a ColumnArticle object to update
+    */
     public function update(AbstractObject $obj)
     {
         try
@@ -63,6 +77,11 @@ class ColumnArticleMapper extends AbstractDataMapper
         }
     }
     
+    /**
+    * find a column article by its id.
+    * @param integer $a_id the id of the column article
+    * @return ColumnArticle $new_column_article the column article object
+    */
     public function find_by_id($id)
     {
         $this->_database_connection->connect();
@@ -90,6 +109,11 @@ class ColumnArticleMapper extends AbstractDataMapper
         }
     }
 
+    /**
+    * get the name of the column a ColumnArticle belongs to
+    * @param integer $a_id the id of the column article
+    * @return string the name of the column
+    */
     private function get_column_name($a_id)
     {
         $this->_database_connection->connect();
@@ -102,7 +126,12 @@ class ColumnArticleMapper extends AbstractDataMapper
         $this->_database_connection->close_connection();
         return $result['c_name'];
     }
-    
+
+
+    /**
+    * get every single column article
+    * @return array(ColumnArticle) $articles the array of all articles
+    */
     public function get_all()
     {
         $this->_database_connection->connect();
@@ -123,6 +152,11 @@ class ColumnArticleMapper extends AbstractDataMapper
         return $column_articles; 
     }
 
+    /**
+    * get a max-limited array of most recent column articles
+    * @param int the limit 
+    * @return array(ColumnArticle) $articles the array of recent column articles
+    */
     public function get_recent($limit)
     {
         try
@@ -143,7 +177,12 @@ class ColumnArticleMapper extends AbstractDataMapper
             echo 'ERROR: ' . $e->getMessage();
         }
     }
-
+    
+    /**
+    * save a new object to the database.
+    * @access protected
+    * @param ColumnArticle $obj the article to save to the database 
+    */
     protected function _save_to_database(AbstractObject $obj)
     {
         try

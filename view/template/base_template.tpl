@@ -16,7 +16,7 @@
                         <?php if ($this->_model->is_user_logged_in())
                         {
                             echo '<p>Logged in as ' . $this->_model->get_logged_in_username() . '</p>';
-                            echo '<a href="<?php echo HTTP_ROOTPATH; ?>/?login&action=logout">Logout</a>';
+                            echo '<a href="' . HTTP_ROOTPATH . '/?login&action=logout">Logout</a>';
                         } else {
                         ?>
                         <ul>
@@ -31,7 +31,7 @@
                 <div class="restrict_and_center">
                     <ul id="horizontal_list" style="width:465px">
                         <li>
-                            <a href="/">home</a>
+                            <a href="<?php echo HTTP_ROOTPATH; ?>/">home</a>
                         </li>
                         <li>
                             <a href="<?php echo HTTP_ROOTPATH; ?>/?articles">articles</a>
@@ -75,6 +75,7 @@
             </div>
             <div class="spacer"></div>
             <footer id="global_footer">
+                <a href="<?php echo HTTP_ROOTPATH; ?>/userguide.txt"/>User Guide</a>
             </footer>
         </section>
         <div class="spacer"></div>

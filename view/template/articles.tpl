@@ -5,7 +5,7 @@
     <?php 
     foreach ($data['articles'] as $article)
     {
-        echo '<a href="/?view_article&a_id=' . $article->get_id() . '">';
+        echo '<a href="' . HTTP_ROOTPATH . '/?view_article&a_id=' . $article->get_id() . '">';
         echo '<div class="fiveply-content-box"';
         echo 'style="background-image:url(' . $article->cover_image . ')">';
         echo '<p>' . $article->title . '</p>';

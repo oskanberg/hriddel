@@ -14,8 +14,8 @@
     {
     ?>
     <form action="?register&action=register_user" method="post" class="pad" style="width:220px; margin: 0 auto;">
-      <input type="text" name="username" placeholder="Username"><br />
-      <input type="text" name="name" placeholder="Full name"><br />
+      <input type="text" name="username" placeholder="Username" required><br />
+      <input type="text" name="name" placeholder="Full name" required><br />
       <input type="submit">
     </form>
     <?php } ?>

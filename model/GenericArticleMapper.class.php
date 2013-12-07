@@ -1,5 +1,10 @@
 <?php
 
+/*
+* a class to handle the three types of article
+* handles requests by passing them to the correct mappers
+* adds features common to all articles on the way back
+*/
 class GenericArticleMapper extends AbstractDataMapper
 {
 
@@ -15,6 +20,12 @@ class GenericArticleMapper extends AbstractDataMapper
         $this->review_mapper = new ReviewMapper($this->_database_connection);
     }
     
+    /**
+    * create a new object of either review, article, column article
+    * which to return is determined by what data is passed in.
+    * add editors and whether or not it is highlighted as attributes
+    * @return AbstractObject $article the new article
+    */
     public function create_new(array $data)
     {
         $article = null;
@@ -34,6 +45,11 @@ class GenericArticleMapper extends AbstractDataMapper
         return $article;
     }
 
+    /**
+    * get the correct mapper for a given object, based on its class
+    * @access private
+    * @return AbstractDataMapper reference to the correct mapper to use
+    */
     private function get_mapper_for_object($obj)
     {
         if ($obj instanceof Review)
@@ -46,6 +62,11 @@ class GenericArticleMapper extends AbstractDataMapper
         }
     }
 
+    /**
+    * get the correct mapper for a given id, based on the type that id references
+    * @access private
+    * @return AbstractDataMapper reference to the correct mapper to use
+    */
     private function get_mapper_for_id($a_id)
     {
         $this->_database_connection->connect();
@@ -70,18 +91,29 @@ class GenericArticleMapper extends AbstractDataMapper
             echo 'ERROR: ' . $e->getMessage();
         }
     }
-
+    
+    /**
+    * save a given article to the database
+    * @param AbstractObject $obj an article object to save
+    */
     public function save(AbstractObject $obj)
     {
         $this->get_mapper_for_object($obj)->save($obj);
     }
 
-
+    
+   /**
+    * the scope of this assessment doesn't need comments deleting
+    */
     public function delete(AbstractObject $obj)
     {
-        $this->get_mapper_for_object($obj)->save($obj);
     }
 
+    /**
+    * add another user as editor to this article
+    * @param int $a_id the id of the article we want to add an editor to
+    * @param User $editor the user we want to add as editor
+    */
     public function add_editor($a_id, $editor)
     {
         $this->_database_connection->connect();
@@ -100,6 +132,10 @@ class GenericArticleMapper extends AbstractDataMapper
         }
     }
 
+    /**
+    * highlight an article
+    * @param AbstractObject $article the article we want to highlight
+    */
     public function highlight(AbstractObject $obj)
     {
         $this->_database_connection->connect();
@@ -117,6 +153,10 @@ class GenericArticleMapper extends AbstractDataMapper
         }
     }
 
+    /**
+    * get max-limited array of highlighted articles, most recent first 
+    * @param integer $limit the max number to return
+    */
     public function get_recent_highlighted_articles($limit)
     {
         try
@@ -138,6 +178,10 @@ class GenericArticleMapper extends AbstractDataMapper
         }
     }
 
+    /**
+    * check whether a given article is highlighted
+    * @param integer $a_id the id of the article in question
+    */
     public function is_article_highlighted($a_id)
     {
         try
@@ -160,11 +204,20 @@ class GenericArticleMapper extends AbstractDataMapper
         }
     }
     
+   /**
+    * update an article's corresponding database record
+    * @param AbstractObject $obj an article object to update
+    */
     public function update(AbstractObject $obj)
     {
         $this->get_mapper_for_object($obj)->update($obj);
     }
     
+    /**
+    * find an article by its id
+    * @param integer $a_id the article id
+    * @return AbstractObject instance (either article, column article, review)
+    */
     public function find_by_id($a_id)
     {
         $article = $this->get_mapper_for_id($a_id)->find_by_id($a_id);
@@ -173,6 +226,10 @@ class GenericArticleMapper extends AbstractDataMapper
         return $article;
     }
     
+    /**
+    * get all articles
+    * @return array(AbstractObject) merged array of all reviews, column articles, articles
+    */
     public function get_all()
     {
         $articles = array_merge(
@@ -187,7 +244,12 @@ class GenericArticleMapper extends AbstractDataMapper
         }
         return $articles;
     }
-
+    
+    /**
+    * get all the editors of an article
+    * @param integer $a_id the article id
+    * @return array(User) all the editors of this piece
+    */
     public function get_article_editors($a_id)
     {
         try
@@ -211,6 +273,12 @@ class GenericArticleMapper extends AbstractDataMapper
         }
     }
 
+    /**
+    * register a like or dislike
+    * @param User $user user to make the impression
+    * @param integer $a_id article id
+    * @param string $impression like/dislike
+    */
     public function store_impression($user, $a_id, $impression)
     {
         try
@@ -237,6 +305,13 @@ class GenericArticleMapper extends AbstractDataMapper
         }
     }
 
+    /**
+    * get all the articles that a given user has given a given impression
+    * e.g. get all the articles that Ed has disliked
+    * @param User $user the user to check
+    * @param string $impression to check for
+    * @return array(AbstractObject) array of the articles
+    */
     public function get_all_articles_with_impression_by_user($user, $impression)
     {
         try
@@ -261,6 +336,11 @@ class GenericArticleMapper extends AbstractDataMapper
         }
     }
 
+    /**
+    * get the articles with the most likes, up to a limit
+    * @param integer $limit the max number to return
+    * @return array(AbstractObject) array of the articles
+    */
     public function get_most_liked($lim)
     {
         try
@@ -282,6 +362,11 @@ class GenericArticleMapper extends AbstractDataMapper
         }
     }
 
+    /**
+    * update a record such that a given user is now listed as author
+    * @param string $username username of the new author
+    * @param integer $article_id the id of the article they are authoring
+    */
     public function add_author($username, $article_id)
     {
         try

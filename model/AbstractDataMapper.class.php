@@ -1,14 +1,26 @@
 <?php
 
+/**
+* a dater mapper for all datamappers to inherit
+*/
 abstract class AbstractDataMapper
 {
     protected $_database_connection = null;
 
+    /**
+    * construct mapper: save a reference to a database connection object
+    * @param DatabaseConnection $database_connection
+     */
     public function __construct(DatabaseConnection $database_connection)
     {
         $this->_database_connection = $database_connection;
     }
     
+    /**
+    * get an array of authors of a given article
+    * @param integer $a_id the id of the article
+    * @return array $authors array of authors for the given article
+     */
     protected function _get_authors($a_id)
     {
         try

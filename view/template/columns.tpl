@@ -9,7 +9,7 @@ foreach ($data['column_names'] as $column_name)
     {
         if ($column_article->column_name == $column_name)
         {
-            echo '<a href="/?view_article&a_id=' . $column_article->get_id() . '">';
+            echo '<a href="' . HTTP_ROOTPATH . '/?view_article&a_id=' . $column_article->get_id() . '">';
             echo '<div class="fiveply-content-box"';
             echo 'style="background-image:url(' . $column_article->cover_image . ')">';
             echo '<p>' . $column_article->title . '</p>';

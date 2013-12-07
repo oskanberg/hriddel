@@ -14,10 +14,7 @@ class ReviewMapper extends AbstractDataMapper
             $new_review->status = $data['status'];
             $new_review->cover_image = $data['cover_image'];
             $new_review->review_score = $data['review_score'];
-            if (isset($data['publish_date']))
-            {
-                $new_article->date = $data['publish_date'];
-            }
+            $new_review->date = $data['publish_date'];
             return $new_review;
         } else {
             throw new Exception('Need data.');

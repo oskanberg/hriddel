@@ -19,15 +19,15 @@
             <hr>
         </div>
         <div style="width:570px; display:inline-block; verticle-align:top">
-            <form action="?submit&action=ammend_article&a_id=<?php echo $_GET['a_id']; ?>" method="post">
+            <form action="<?php echo HTTP_ROOTPATH; ?>/?submit&action=ammend_article&a_id=<?php echo $_GET['a_id']; ?>" method="post">
                 <div id="accordion" style="display:none;">
                     <h3>title</h3>
                     <div>
-                        <input type="text" name="title" style="width:90%" placeholder="Title" value="<?php echo $data['article']->title; ?>" autofocus/>
+                        <input type="text" name="title" style="width:90%" placeholder="Title" value="<?php echo $data['article']->title; ?>" autofocus required/>
                     </div>
                     <h3>article content</h3>
                     <div>
-                        <textarea name="content" placeholder="Article content" style="height:250px; font-size: 12px; width:90%"><?php echo $data['article']->content; ?></textarea>
+                        <textarea name="content" placeholder="Article content" style="height:250px; font-size: 12px; width:90%" required><?php echo $data['article']->content; ?></textarea>
                     </div>
                     <h3>authors</h3>
                     <div>
@@ -82,7 +82,7 @@
                     <?php } ?>
                     <h3>cover image</h3>
                     <div>
-                        <input type="text" name="cover_image" style="width:90%"placeholder="Link to cover image" value="<?php echo $data['article']->cover_image; ?>"/>
+                        <input type="text" name="cover_image" style="width:90%"placeholder="Link to cover image" value="<?php echo $data['article']->cover_image; ?>" required/>
                     </div>
                     <h3>update!</h3>
                     <div>
@@ -111,6 +111,16 @@
     <script type="text/javascript">
         $(function () {
             $("#accordion").accordion({
+                beforeActivate: function(event, ui) {
+                    ui.oldPanel.find('input, textarea, select').each( function ()
+                    {
+                        if ($(this).val() == '' && $(this).attr('required'))
+                        {
+                            event.preventDefault();
+                            alert($(this).attr('placeholder') + ' is required');
+                        }
+                    });
+                },
                 activate: function(event, ui) {
                     $(ui.newPanel).find('textarea, input, select').focus();
                 },

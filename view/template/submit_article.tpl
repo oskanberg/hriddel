@@ -13,19 +13,19 @@
     if ($data['show_form'])
     {
     ?>
-    <form action="?submit&action=submit_article" method="post">        
+    <form action="<?php echo HTTP_ROOTPATH; ?>/?submit&action=submit_article" method="post">        
         <div id="accordion" style="display:none;">
             <h3>title</h3>
             <div>
-                <input type="text" name="title" style="width:99%" placeholder="Title" autofocus/>
+                <input type="text" name="title" style="width:99%" placeholder="Title" autofocus required/>
             </div>
             <h3>article content</h3>
             <div>
-                <textarea name="content" placeholder="Article content" style="height:250px; width:99%"></textarea>
+                <textarea name="content" placeholder="Article content" style="height:250px; width:99%" required></textarea>
             </div>
             <h3>article type</h3>
             <div id="selector">
-                <select name="type" id="type_selector">
+                <select name="type" id="type_selector" required>
                     <option value="">Select article type...</option>
                     <option value="article">article</option>
                     <option value="review">review</option>
@@ -60,7 +60,7 @@
             </div>
             <h3>cover image</h3>
             <div>
-                <input type="text" name="cover_image" style="width:99%"placeholder="Link to cover image"/>
+                <input type="text" name="cover_image" style="width:99%"placeholder="Link to cover image" required/>
             </div>
             <h3>submit!</h3>
             <div>
@@ -71,6 +71,16 @@
     <script type="text/javascript">
         $(function () {
             $("#accordion").accordion({
+                beforeActivate: function(event, ui) {
+                    ui.oldPanel.find('input, textarea, select').each( function ()
+                    {
+                        if ($(this).val() == '' && $(this).attr('required'))
+                        {
+                            event.preventDefault();
+                            alert($(this).attr('placeholder') + ' is required');
+                        }
+                    });
+                },
                 activate: function(event, ui) {
                     $(ui.newPanel).find('textarea, input, select').focus();
                 },
