@@ -12,7 +12,7 @@ abstract class Model
         $host = 'mysql-student';
         $database_name = 'Y6386774IAPT';
         $username = 'Y6386774';
-        $password = 'iq01Sr6uiPjf';
+        $password = '';
         $this->_database_connection = new DatabaseConnection($host, $database_name, $username, $password);
         $this->_user_mapper = new UserMapper($this->_database_connection);
     }
