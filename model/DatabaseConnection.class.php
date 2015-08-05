@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 /**
-* a class to encapsulate the ability to speak to the database
-*/
+ * a class to encapsulate the ability to speak to the database
+ */
 class DatabaseConnection
 {
     private $host;
@@ -11,13 +11,13 @@ class DatabaseConnection
     private $password;
     private $pdo_connection = null;
 
-   /**
-    * construct with database host, database name, username, password
-    * @param string $host
-    * @param string $database_name
-    * @param string $username
-    * @param string $password
-    */
+    /**
+     * construct with database host, database name, username, password
+     * @param string $host
+     * @param string $database_name
+     * @param string $username
+     * @param string $password
+     */
     public function __construct($host, $database_name, $username, $password)
     {
         $this->host = $host;
@@ -26,14 +26,13 @@ class DatabaseConnection
         $this->password = $password;
     }
 
-   /**
-    * connect to the database
-    * @return boolean whether connect succeeded
-    */
+    /**
+     * connect to the database
+     * @return boolean whether connect succeeded
+     */
     public function connect()
     {
-        if (!is_null($this->pdo_connection))
-        {
+        if (!is_null($this->pdo_connection)) {
             // might already have connected
             return true;
         }
@@ -42,26 +41,24 @@ class DatabaseConnection
             $conn_str = 'mysql:host=' . $this->host . ';dbname=' . $this->database_name;
             $this->pdo_connection = new PDO($conn_str, $this->username, $this->password);
             $this->pdo_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             echo 'ERROR: ' . $e->getMessage();
             return false;
         }
         return true;
     }
 
-   /**
-    * get the active connection (make one if there isn't one already)
-    * @return PDO the active connection 
-    */
-    public function get_connection()
+    /**
+     * get the active connection (make one if there isn't one already)
+     * @return PDO the active connection
+     */
+    public function getConnection()
     {
-        if(!is_null($this->pdo_connection))
-        {
+        if (!is_null($this->pdo_connection)) {
             return $this->pdo_connection;
         } else {
             // try connecting, in case we forgot
-            if ($this->connect())
-            {
+            if ($this->connect()) {
                 return $this->pdo_connection;
             } else {
                 // uh oh
@@ -70,13 +67,11 @@ class DatabaseConnection
         }
     }
 
-   /**
-    * destroy the current connection to the database
-    */
-    public function close_connection()
+    /**
+     * destroy the current connection to the database
+     */
+    public function closeConnection()
     {
         $this->pdo_connection = null;
     }
 }
-
-?>

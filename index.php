@@ -10,73 +10,73 @@ $map = array(
     'home' => array(
         'model' => 'ArticleManagementModel',
         'controller' => 'ArticleManagementController',
-        'view' => 'IndexView'
+        'view' => 'IndexView',
     ),
     'login' => array(
         'model' => 'UserManagementModel',
         'controller' => 'UserManagementController',
-        'view' => 'LoginView'
+        'view' => 'LoginView',
     ),
     'register' => array(
         'model' => 'UserManagementModel',
         'controller' => 'UserManagementController',
-        'view' => 'RegisterView'
+        'view' => 'RegisterView',
     ),
     'submit' => array(
         'model' => 'ArticleManagementModel',
         'controller' => 'ArticleManagementController',
-        'view' => 'SubmitArticleView'
+        'view' => 'SubmitArticleView',
     ),
     'manage_users' => array(
         'model' => 'UserManagementModel',
         'controller' => 'UserManagementController',
-        'view' => 'UserManagementView'
+        'view' => 'UserManagementView',
     ),
     'manage_articles' => array(
         'model' => 'ArticleManagementModel',
         'controller' => 'ArticleManagementController',
-        'view' => 'ArticleManagementView'
+        'view' => 'ArticleManagementView',
     ),
     'edit_article' => array(
         'model' => 'ArticleManagementModel',
         'controller' => 'ArticleManagementController',
-        'view' => 'EditArticleView'
+        'view' => 'EditArticleView',
     ),
     'view_article' => array(
         'model' => 'ArticleManagementModel',
         'controller' => 'ArticleManagementController',
-        'view' => 'ViewArticleView'
+        'view' => 'ViewArticleView',
     ),
     'articles' => array(
         'model' => 'ArticleManagementModel',
         'controller' => 'ArticleManagementController',
-        'view' => 'ArticlesView'
+        'view' => 'ArticlesView',
     ),
     'reviews' => array(
         'model' => 'ArticleManagementModel',
         'controller' => 'ArticleManagementController',
-        'view' => 'ReviewsView'
+        'view' => 'ReviewsView',
     ),
     'columns' => array(
         'model' => 'ArticleManagementModel',
         'controller' => 'ArticleManagementController',
-        'view' => 'ColumnsView'
+        'view' => 'ColumnsView',
     ),
     // special cases: blank view for jQuery.post() result
     'manage_users_submit' => array(
         'model' => 'UserManagementModel',
         'controller' => 'UserManagementController',
-        'view' => 'ErrorView'
+        'view' => 'ErrorView',
     ),
     'manage_articles_submit' => array(
         'model' => 'ArticleManagementModel',
         'controller' => 'ArticleManagementController',
-        'view' => 'ErrorView'
+        'view' => 'ErrorView',
     ),
     'add_comment_submit' => array(
         'model' => 'ArticleManagementModel',
         'controller' => 'ArticleManagementController',
-        'view' => 'ErrorView'
+        'view' => 'ErrorView',
     ),
 );
 
@@ -84,8 +84,7 @@ $model = null;
 $view = null;
 $controller = null;
 
-if (empty($_GET))
-{
+if (empty($_GET)) {
     $model = new ArticleManagementModel();
     $controller = new ArticleManagementController($model);
     $view = new IndexView($controller, $model);
@@ -97,11 +96,8 @@ if (empty($_GET))
     $view = new $map[$page]['view']($controller, $model);
 }
 
-if (isset($_GET['action']))
-{
+if (isset($_GET['action'])) {
     $controller->{$_GET['action']}();
 }
 
 $view->display();
-
-?>

@@ -12,13 +12,11 @@ class SubmitArticleView extends View
             'view_specific_template' => $this->template,
             'show_form' => true,
             'show_error' => false,
-            'show_result' => false
+            'show_result' => false,
         );
         $data['authors'] = $this->_model->get_all_possible_authors();
-        if ($this->_model->has_submit_been_attempted())
-        {
-            if ($this->_model->error_exists())
-            {
+        if ($this->_model->has_submit_been_attempted()) {
+            if ($this->_model->error_exists()) {
                 $data['show_error'] = true;
                 $data['error_string'] = '<p class="error">' . $this->_model->get_error_string() . '</p>';
             } else {
@@ -28,8 +26,6 @@ class SubmitArticleView extends View
                 $data['submit_result_text'] = '<p>Article successfully committed.</p>';
             }
         }
-        include_once(TEMPLATE_PATH . 'base_template.tpl');
+        include_once TEMPLATE_PATH . 'base_template.tpl';
     }
 }
-
-?>

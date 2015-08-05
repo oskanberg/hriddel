@@ -5,7 +5,7 @@
  */
 abstract class Controller
 {
-     /**
+    /**
      * every controller has its corresponding model
      * @access protected
      * @var Model
@@ -22,5 +22,3 @@ abstract class Controller
     }
 
 }
-
-?>

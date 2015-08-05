@@ -18,10 +18,10 @@ abstract class Model
     }
 
     /**
-    * record that an error has occured in the current request
-    * record a string to display back to the user
-    * @param string $error_string the error to display
-    */
+     * record that an error has occured in the current request
+     * record a string to display back to the user
+     * @param string $error_string the error to display
+     */
     protected function _record_error($error_string)
     {
         $this->_error = true;
@@ -29,22 +29,21 @@ abstract class Model
     }
 
     /**
-    * check whether an error exists
-    * @return boolean whether there's an error
-    */
-    public function error_exists()
+     * check whether an error exists
+     * @return boolean whether there's an error
+     */
+    public function errorExists()
     {
         return $this->_error;
     }
-    
+
     /**
-    * get the error string
-    * @return string error string
-    */
-    public function get_error_string()
+     * get the error string
+     * @return string error string
+     */
+    public function getErrorString()
     {
-        if (!is_null($this->_error_string))
-        {
+        if (!is_null($this->_error_string)) {
             return $this->_error_string;
         } else {
             return 'No error.'; // might change this to exception
@@ -52,13 +51,12 @@ abstract class Model
     }
 
     /**
-    * is the current user logged in?
-    * @return boolean
-    */
-    public function is_user_logged_in()
+     * is the current user logged in?
+     * @return boolean
+     */
+    public function isUserLoggedIn()
     {
-        if (isset($_SESSION['username']))
-        {
+        if (isset($_SESSION['username'])) {
             return true;
         } else {
             return false;
@@ -66,13 +64,12 @@ abstract class Model
     }
 
     /**
-    * get the username of the current logged in user
-    * @return string username
-    */
-    public function get_logged_in_username()
+     * get the username of the current logged in user
+     * @return string username
+     */
+    public function getLoggedInUsername()
     {
-        if (isset($_SESSION['username']))
-        {
+        if (isset($_SESSION['username'])) {
             return $_SESSION['username'];
         } else {
             return null;
@@ -80,57 +77,52 @@ abstract class Model
     }
 
     /**
-    * get the User object of the current logged in user
-    * @return User the current logged in user
-    */
-    public function get_logged_in_user()
+     * get the User object of the current logged in user
+     * @return User the current logged in user
+     */
+    public function getLoggedInUser()
     {
-        if ($this->is_user_logged_in())
-        {
+        if ($this->isUserLoggedIn()) {
             $user = $this->_user_mapper->find_by_id($_SESSION['username']);
             return $user;
         }
     }
 
     /**
-    * get the type of the logged in user
-    * @return string type of the logged in user
-    */
-    public function get_logged_in_type()
+     * get the type of the logged in user
+     * @return string type of the logged in user
+     */
+    public function getLoggedInType()
     {
-        return $this->get_logged_in_user()->type;
+        return $this->getLoggedInUser()->type;
     }
-    
+
     /**
-    * check whether the current user is allowed to submit articles
-    * @return boolean are they allowed?
-    */
-    public function can_current_user_submit_articles()
+     * check whether the current user is allowed to submit articles
+     * @return boolean are they allowed?
+     */
+    public function canCurrentUserSubmitArticles()
     {
-        if ($this->is_user_logged_in())
-        {
+        if ($this->isUserLoggedIn()) {
             $user = $this->_user_mapper->find_by_id($_SESSION['username']);
             // the only type of user that can't submit articles is the subscriber
-            if ($user->type == 'subscriber')
-            {
+            if ($user->type == 'subscriber') {
                 return false;
             } else {
                 return true;
             }
         }
     }
-    
+
     /**
-    * check whether the current user is allowed to manage users
-    * @return boolean are they allowed?
-    */
-    public function can_current_user_manage_users()
+     * check whether the current user is allowed to manage users
+     * @return boolean are they allowed?
+     */
+    public function canCurrentUserManageUsers()
     {
-        if ($this->is_user_logged_in())
-        {
+        if ($this->isUserLoggedIn()) {
             $user = $this->_user_mapper->find_by_id($_SESSION['username']);
-            if ($user->type == 'publisher')
-            {
+            if ($user->type == 'publisher') {
                 return true;
             } else {
                 return false;
@@ -138,5 +130,3 @@ abstract class Model
         }
     }
 }
-
-?>

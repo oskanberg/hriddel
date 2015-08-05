@@ -1,8 +1,8 @@
 <?php
 
 /**
-* an abstract object for all domain objects to inherit
-*/
+ * an abstract object for all domain objects to inherit
+ */
 abstract class AbstractObject
 {
     /**
@@ -11,15 +11,14 @@ abstract class AbstractObject
      * @var integer|string
      */
     private $_id = null;
-    
+
     /**
-    * set the id of this object
-    * @param integer|string $id the id of the object
+     * set the id of this object
+     * @param integer|string $id the id of the object
      */
-    public function set_id($id)
+    public function setId($id)
     {
-        if (is_null($this->_id))
-        {
+        if (is_null($this->_id)) {
             $this->_id = $id;
         } else {
             throw new Exception('Object id already set.');
@@ -27,13 +26,11 @@ abstract class AbstractObject
     }
 
     /**
-    * get the id of this object
-    * @return integer|string $id the id of the object
+     * get the id of this object
+     * @return integer|string $id the id of the object
      */
-    public function get_id()
+    public function getId()
     {
         return $this->_id;
     }
 }
-
-?>

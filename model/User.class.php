@@ -1,9 +1,9 @@
 <?php
 
 /*
-* I deliberately don't have getters and setters
-* in this case they would only be single-line no-logic operations
-*/
+ * I deliberately don't have getters and setters
+ * in this case they would only be single-line no-logic operations
+ */
 
 class User extends AbstractObject
 {
@@ -11,5 +11,3 @@ class User extends AbstractObject
     public $name;
     public $type;
 }
-
-?>

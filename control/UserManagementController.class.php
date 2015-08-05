@@ -1,8 +1,8 @@
 <?php
 
 /**
-* A controller for everything concerning user management
-*/
+ * A controller for everything concerning user management
+ */
 class UserManagementController extends Controller
 {
     /**
@@ -11,8 +11,7 @@ class UserManagementController extends Controller
      */
     public function authenticate()
     {
-        if (isset($_POST['username']))
-        {
+        if (isset($_POST['username'])) {
             $this->_model->authenticate_username($_POST['username']);
         }
     }
@@ -31,25 +30,21 @@ class UserManagementController extends Controller
      * Register a new user. Gets parameters from $_POST
      * returns nothing
      */
-    public function register_user()
+    public function registerUser()
     {
-        if (isset($_POST['username']) && isset($_POST['name']))
-        {
-            $this->_model->register_user($_POST['username'], $_POST['name']);
+        if (isset($_POST['username']) && isset($_POST['name'])) {
+            $this->_model->registerUser($_POST['username'], $_POST['name']);
         }
     }
-    
+
     /**
      * Change the type of multiple users. Gets parameters from $_POST
      * returns nothing
      */
-    public function change_type_multiple()
+    public function changeTypeMultiple()
     {
-        if (isset($_POST['users']) && isset($_POST['type']))
-        {
-            $this->_model->change_type_multiple($_POST['users'], $_POST['type']);
+        if (isset($_POST['users']) && isset($_POST['type'])) {
+            $this->_model->changeTypeMultiple($_POST['users'], $_POST['type']);
         }
     }
 }
-
-?>

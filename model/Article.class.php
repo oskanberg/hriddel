@@ -1,23 +1,23 @@
 <?php
 
 /*
-* I deliberately don't have getters and setters
-* in this case they would only be single-line no-logic operations
-*/
+ * I deliberately don't have getters and setters
+ * in this case they would only be single-line no-logic operations
+ */
 class Article extends AbstractObject
 {
     /**
      * the actual content of the article
      */
     public $content;
-    
+
     /**
      * array of User objects that represent the authors of the piece
      */
     public $authors;
 
     /**
-    * title of the piece
+     * title of the piece
      */
     public $title;
 
@@ -51,5 +51,3 @@ class Article extends AbstractObject
      */
     public $highlighted = false;
 }
-
-?>

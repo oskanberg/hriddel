@@ -2,15 +2,14 @@
 
 class ColumnArticleMapper extends AbstractDataMapper
 {
-   /**
-    * Create a new column article given some data
-    * @param Array() $data an array of all the required data to make a new column article
-    * @return ColumnArticle $new_column_article the newly created column article object
-    */
-    public function create_new(array $data)
+    /**
+     * Create a new column article given some data
+     * @param Array() $data an array of all the required data to make a new column article
+     * @return ColumnArticle $new_column_article the newly created column article object
+     */
+    public function createNew(array $data)
     {
-        if(!is_null($data))
-        {
+        if (!is_null($data)) {
             $new_column_article = new ColumnArticle();
             $new_column_article->content = $data['content'];
             $new_column_article->authors = $data['authors'];
@@ -19,8 +18,7 @@ class ColumnArticleMapper extends AbstractDataMapper
             $new_column_article->status = $data['status'];
             $new_column_article->cover_image = $data['cover_image'];
             $new_column_article->column_name = $data['column_name'];
-            if (isset($data['publish_date']))
-            {
+            if (isset($data['publish_date'])) {
                 $new_column_article->date = $data['publish_date'];
             }
             return $new_column_article;
@@ -30,25 +28,24 @@ class ColumnArticleMapper extends AbstractDataMapper
     }
 
     /**
-    * save a given column article to the database
-    * @param ColumnArticle $obj an ColumnArticle object to save
-    */
+     * save a given column article to the database
+     * @param ColumnArticle $obj an ColumnArticle object to save
+     */
     public function save(AbstractObject $obj)
     {
         $obj->set_id($this->_save_to_database($obj));
     }
-
 
     public function delete(AbstractObject $obj)
     {
 
     }
 
-   /**
-    * update a given column article object's corresponding database entry
-    * assume we will never want to change an article's type
-    * @param ColumnArticle $obj a ColumnArticle object to update
-    */
+    /**
+     * update a given column article object's corresponding database entry
+     * assume we will never want to change an article's type
+     * @param ColumnArticle $obj a ColumnArticle object to update
+     */
     public function update(AbstractObject $obj)
     {
         try
@@ -61,28 +58,28 @@ class ColumnArticleMapper extends AbstractDataMapper
                 ':status' => $obj->status,
                 ':title' => $obj->title,
                 ':cover_image' => $obj->cover_image,
-                ':a_id' => $obj->get_id()
+                ':a_id' => $obj->get_id(),
             ));
 
             $stmt = 'UPDATE column_mappings SET c_name=:c_name WHERE a_id=:a_id';
             $statement = $this->_database_connection->get_connection()->prepare($stmt);
             $statement->execute(array(
                 ':c_name' => $obj->column_name,
-                ':a_id' => $obj->get_id()
+                ':a_id' => $obj->get_id(),
             ));
             $this->_database_connection->close_connection();
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             $this->_database_connection->close_connection();
             echo 'ERROR: ' . $e->getMessage();
         }
     }
-    
+
     /**
-    * find a column article by its id.
-    * @param integer $a_id the id of the column article
-    * @return ColumnArticle $new_column_article the column article object
-    */
-    public function find_by_id($id)
+     * find a column article by its id.
+     * @param integer $a_id the id of the column article
+     * @return ColumnArticle $new_column_article the column article object
+     */
+    public function findById($id)
     {
         $this->_database_connection->connect();
         try
@@ -90,49 +87,47 @@ class ColumnArticleMapper extends AbstractDataMapper
             $stmt = 'SELECT * FROM articles WHERE a_id=:a_id';
             $statement = $this->_database_connection->get_connection()->prepare($stmt);
             $statement->execute(array(
-                ':a_id' => $id
+                ':a_id' => $id,
             ));
             $result = $statement->fetch(PDO::FETCH_ASSOC);
-            if ($result)
-            {
-                $result['column_name'] = $this->get_column_name($id);
+            if ($result) {
+                $result['column_name'] = $this->getColumnName($id);
                 $result['authors'] = $this->_get_authors($id);
-                $new_column_article = $this->create_new($result);
+                $new_column_article = $this->createNew($result);
                 $new_column_article->set_id($id);
                 return $new_column_article;
             } else {
                 echo 'No review with that id (' . $id . ') found.';
             }
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             $this->_database_connection->close_connection();
             echo 'ERROR: ' . $e->getMessage();
         }
     }
 
     /**
-    * get the name of the column a ColumnArticle belongs to
-    * @param integer $a_id the id of the column article
-    * @return string the name of the column
-    */
-    private function get_column_name($a_id)
+     * get the name of the column a ColumnArticle belongs to
+     * @param integer $a_id the id of the column article
+     * @return string the name of the column
+     */
+    private function getColumnName($a_id)
     {
         $this->_database_connection->connect();
         $stmt = 'SELECT c_name FROM column_mappings WHERE a_id=:article_id';
         $statement = $this->_database_connection->get_connection()->prepare($stmt);
         $statement->execute(array(
-            'article_id' => $a_id
+            'article_id' => $a_id,
         ));
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         $this->_database_connection->close_connection();
         return $result['c_name'];
     }
 
-
     /**
-    * get every single column article
-    * @return array(ColumnArticle) $articles the array of all articles
-    */
-    public function get_all()
+     * get every single column article
+     * @return array(ColumnArticle) $articles the array of all articles
+     */
+    public function getAll()
     {
         $this->_database_connection->connect();
         $stmt = 'SELECT * FROM articles WHERE type="column article"';
@@ -140,24 +135,23 @@ class ColumnArticleMapper extends AbstractDataMapper
         $statement->execute();
         // initialise empty array in case there are none
         $column_articles = array();
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC))
-        {
-            $row['column_name'] = $this->get_column_name($row['a_id']);
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $row['column_name'] = $this->getColumnName($row['a_id']);
             $row['authors'] = $this->_get_authors($row['a_id']);
-            $new_column_article = $this->create_new($row);
+            $new_column_article = $this->createNew($row);
             $new_column_article->set_id($row['a_id']);
             $column_articles[] = $new_column_article;
         }
         $this->_database_connection->close_connection();
-        return $column_articles; 
+        return $column_articles;
     }
 
     /**
-    * get a max-limited array of most recent column articles
-    * @param int the limit 
-    * @return array(ColumnArticle) $articles the array of recent column articles
-    */
-    public function get_recent($limit)
+     * get a max-limited array of most recent column articles
+     * @param int the limit
+     * @return array(ColumnArticle) $articles the array of recent column articles
+     */
+    public function getRecent($limit)
     {
         try
         {
@@ -167,22 +161,21 @@ class ColumnArticleMapper extends AbstractDataMapper
             $statement->bindParam(':lim', $limit, PDO::PARAM_INT);
             $statement->execute();
             $articles = array();
-            while ($row = $statement->fetch(PDO::FETCH_ASSOC))
-            {
-                $articles[] = $this->find_by_id($row['a_id']);
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $articles[] = $this->findById($row['a_id']);
             }
             return $articles;
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             $this->_database_connection->close_connection();
             echo 'ERROR: ' . $e->getMessage();
         }
     }
-    
+
     /**
-    * save a new object to the database.
-    * @access protected
-    * @param ColumnArticle $obj the article to save to the database 
-    */
+     * save a new object to the database.
+     * @access protected
+     * @param ColumnArticle $obj the article to save to the database
+     */
     protected function _save_to_database(AbstractObject $obj)
     {
         try
@@ -195,17 +188,16 @@ class ColumnArticleMapper extends AbstractDataMapper
                 ':status' => $obj->status,
                 ':title' => $obj->title,
                 ':type' => $obj->type,
-                ':cover_image' => $obj->cover_image
+                ':cover_image' => $obj->cover_image,
             ));
-            
+
             $this_column_article_id = $this->_database_connection->get_connection()->lastInsertID();
             $stmt = 'INSERT INTO authorship (username, a_id) VALUES (:username, :article_id)';
             $statement = $this->_database_connection->get_connection()->prepare($stmt);
-            foreach ($obj->authors as $author)
-            {
+            foreach ($obj->authors as $author) {
                 $statement->execute(array(
                     ':username' => $author->get_id(),
-                    ':article_id' => $this_column_article_id
+                    ':article_id' => $this_column_article_id,
                 ));
             }
 
@@ -213,17 +205,15 @@ class ColumnArticleMapper extends AbstractDataMapper
             $statement = $this->_database_connection->get_connection()->prepare($stmt);
             $statement->execute(array(
                 ':column_name' => $obj->column_name,
-                ':article_id' => $this_column_article_id
+                ':article_id' => $this_column_article_id,
             ));
 
             $this->_database_connection->close_connection();
             return $this_column_article_id;
-            
-        } catch(PDOException $e) {
+
+        } catch (PDOException $e) {
             $this->_database_connection->close_connection();
             echo 'ERROR: ' . $e->getMessage();
         }
     }
 }
-
-?>

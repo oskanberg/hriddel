@@ -13,5 +13,3 @@ abstract class View
 
     abstract public function display();
 }
-
-?>

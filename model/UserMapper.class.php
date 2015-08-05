@@ -2,10 +2,9 @@
 
 class UserMapper extends AbstractDataMapper
 {
-    public function create_new(array $data)
+    public function createNew(array $data)
     {
-        if(!is_null($data))
-        {
+        if (!is_null($data)) {
             $new_user = new User();
             $new_user->username = $data['username'];
             $new_user->name = $data['name'];
@@ -16,7 +15,7 @@ class UserMapper extends AbstractDataMapper
             throw new Exception('Need data.');
         }
     }
-    
+
     public function save(AbstractObject $obj)
     {
         $this->_save_to_database($obj);
@@ -28,12 +27,11 @@ class UserMapper extends AbstractDataMapper
     }
 
     /*
-    * Cannot update username
-    */
+     * Cannot update username
+     */
     public function update(AbstractObject $obj)
     {
-        if (is_null($this->find_by_id($obj->username)))
-        {
+        if (is_null($this->findById($obj->username))) {
             throw new Exception('User to update not found');
         }
         $this->_database_connection->connect();
@@ -46,22 +44,21 @@ class UserMapper extends AbstractDataMapper
         ));
     }
 
-    public function get_all()
+    public function getAll()
     {
         $this->_database_connection->connect();
         $stmt = 'SELECT * FROM users';
         $statement = $this->_database_connection->get_connection()->prepare($stmt);
         $statement->execute();
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC))
-        {
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             // create array of user objects
-            $users[] = $this->create_new($row);
+            $users[] = $this->createNew($row);
         }
         $this->_database_connection->close_connection();
         return $users;
     }
-    
-    public function find_by_id($username)
+
+    public function findById($username)
     {
         $this->_database_connection->connect();
         try
@@ -69,24 +66,23 @@ class UserMapper extends AbstractDataMapper
             $stmt = 'SELECT * FROM users WHERE username=:username';
             $statement = $this->_database_connection->get_connection()->prepare($stmt);
             $statement->execute(array(
-                ':username' => $username
+                ':username' => $username,
             ));
-            if ($statement->rowCount() > 0)
-            {
+            if ($statement->rowCount() > 0) {
                 $result = $statement->fetch(PDO::FETCH_ASSOC);
                 $data = array(
                     'username' => $result['username'],
                     'name' => $result['name'],
-                    'type' => $result['type']
+                    'type' => $result['type'],
                 );
                 $this->_database_connection->close_connection();
-                return $this->create_new($data);
+                return $this->createNew($data);
             } else {
                 $this->_database_connection->close_connection();
                 return null;
             }
-            
-        } catch(PDOException $e) {
+
+        } catch (PDOException $e) {
             $this->_database_connection->close_connection();
             echo 'ERROR: ' . $e->getMessage();
         }
@@ -102,14 +98,12 @@ class UserMapper extends AbstractDataMapper
             $statement->execute(array(
                 ':username' => $obj->username,
                 ':name' => $obj->name,
-                ':type' => $obj->type
+                ':type' => $obj->type,
             ));
             $this->_database_connection->close_connection();
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             $this->_database_connection->close_connection();
             echo 'ERROR: ' . $e->getMessage();
         }
     }
 }
-
-?>
